@@ -1,25 +1,20 @@
 {
   "name": "Antz",
+  "description": "A life-changing productivity hack",
   "version": "1.0",
-  "manifest_version": 2,
-  "description": "Kill em all",
-  "icons": {
-    "128": "./img/bugKiller.png"
-  },
-  // "background": {
-  //   "scripts": ["./src/background.js"],
-  //   "persistent": true
-  // },
+  "permissions": [
+    "tabs", "http://*/*", "https://*/*"
+  ],
   "browser_action": {
-    "default_title": "Antz"
-    // "default_popup": "index.html"
+      "default_title": "Ready. Set. Go.",
+      "default_icon": "./img/bugKiller.png",
+      "default_popup": "hello.html"
   },
-  "permissions": ["tabs", "http://*/*", "https://*/*"],
   "content_scripts": [
     {
-      "matches": ["http://*/*"],
-      "js": ["jquery-3.3.1.min.js", "./src/main.js", "./src/rotate.js"],
-      "css": ["./src/styles.css"]
+      "matches": ["http://*/*", "https://*/*"],
+      "css" : ["./src/styles.css"]
     }
-  ]
+],
+  "manifest_version": 2
 }

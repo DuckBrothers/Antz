@@ -24,11 +24,12 @@
       let x = "#" + ant.id;
       //x = '#ant';
       console.log(x);
-      $(x).click(function() {
+      $(x).click(function(event) {
         console.log("hit");
         $(x).attr("src", "https://adiospests.com/wp-content/uploads/sites/10/2016/04/deadbug.png");
         ant.dead = true;
         $(x).fadeOut(1000);
+        //event.stopPropegation();
       });
     }
 
