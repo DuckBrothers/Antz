@@ -7,6 +7,8 @@
       this.id = antNum;
       this.node = $('<img id="' + antNum + '" class="ant"></img>');
       this.node.attr("src", "http://www.illustrationweb.us/imagebase/media/102-101608.gif");
+      // http://78.media.tumblr.com/8f3d84d35802ef4681ff96f69fa187b1/tumblr_n6bu3cJbUA1raoul2o1_500.gif //char
+      // https://thumbs.gfycat.com/PhysicalFrayedArmyant-max-1mb.gif //ant
       this.currentDirection = Math.floor(Math.random() * 8);
       this.SPEED = 200;
       this.directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
