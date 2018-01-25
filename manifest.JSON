@@ -1,0 +1,25 @@
+{
+  "name": "Antz",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "Kill em all",
+  "icons": {
+    "128": "./img/bugKiller.png"
+  },
+  // "background": {
+  //   "scripts": ["./src/background.js"],
+  //   "persistent": true
+  // },
+  "browser_action": {
+    "default_title": "Antz"
+    // "default_popup": "index.html"
+  },
+  "permissions": ["tabs", "http://*/*", "https://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*"],
+      "js": ["jquery-3.3.1.min.js", "./src/main.js", "./src/rotate.js"],
+      "css": ["./src/styles.css"]
+    }
+  ]
+}
