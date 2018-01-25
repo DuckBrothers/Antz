@@ -1,0 +1,40 @@
+.ant {
+  background: black;
+  height: 25px;
+  width: 25px;
+  position: relative;
+  border-radius: 50%;
+  background-color: green;
+}
+
+
+
+.player1 {
+  background: black;
+  height: 50px;
+  width: 50px;
+  position: relative;
+  border-radius: 50%;
+  background-color: green;
+}
+
+#board {
+  height: 700px;
+  width: 700px;
+  border: 1px black solid;
+}
+
+#apple {
+  position: relative;
+  height: 50px;
+  width: 50px;
+}
+
+.bod {
+  background: black;
+  height: 50px;
+  width: 50px;
+  position: relative;
+  background-color: blue;
+  border-radius: 50%;
+}
