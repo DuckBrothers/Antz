@@ -1,12 +1,12 @@
 {
-  "name": "Antz",
+  "name": "Ants",
   "description": "A life-changing productivity hack",
   "version": "1.0",
   "permissions": [
     "tabs", "http://*/*", "https://*/*"
   ],
   "browser_action": {
-      "default_title": "Ready. Set. Go.",
+      "default_title": "ReadySetGo",
       "default_icon": "./img/bugKiller.png",
       "default_popup": "hello.html"
   },
