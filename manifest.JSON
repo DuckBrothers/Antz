@@ -1,7 +1,7 @@
 {
   "name": "Ants",
   "description": "A life-changing productivity hack",
-  "version": "1.0",
+  "version": "1.1",
   "permissions": [
     "tabs", "http://*/*", "https://*/*"
   ],
@@ -16,5 +16,5 @@
       "css" : ["./src/styles.css"]
     }
 ],
-  "manifest_version": 2
+  "manifest_version": 3
 }
