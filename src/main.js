@@ -83,16 +83,16 @@
     }
 
     killAnt(ant) {
-      console.log(ant.id);
-      console.log('asdasd');
       $(ant.id).click(function(event) {
-        console.log("hit");
+        console.log(`${ant.id} was killed!`);
         $(ant.id).attr("src", character.dead);
         ant.dead = true;
         $(ant.id).fadeOut(1000);
         //event.stopPropegation();
       });
     }
+
+
 
     move() {
       let position = this.node.offset();
@@ -139,7 +139,6 @@
       position.top =
         (position.top + $(document).height() - 50) % ($(document).height() - 50);
 
-      //position.left >= 700 || position.left < 0 || position.top < 0 || position.top > 700
       this.node.offset(position);
 
       if (this.dead) {
@@ -161,7 +160,7 @@
         }
       }
     );
-
+    state.ready = true;
     chrome.runtime.sendMessage({"message": "ready_to_infect"});
   });
 
