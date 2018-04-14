@@ -94,6 +94,8 @@
       });
     }
 
+
+
     move() {
       let position = this.node.offset();
       let dir = Math.floor(Math.random() * 100);
@@ -139,7 +141,6 @@
       position.top =
         (position.top + $(document).height() - 50) % ($(document).height() - 50);
 
-      //position.left >= 700 || position.left < 0 || position.top < 0 || position.top > 700
       this.node.offset(position);
 
       if (this.dead) {
