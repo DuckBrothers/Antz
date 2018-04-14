@@ -1,74 +1,83 @@
 // (function() {
 
-  var characters = {
-    ant: {
-      icon:  "http://moziru.com/images/shaow-clipart-ant-7.png",
-      dead: "https://adiospests.com/wp-content/uploads/sites/10/2016/04/deadbug.png",
-      type: "ant",
-      words: [
-        '', '! ', 'ew ', 'ant ', 'hill ', 'queen ', 'picnic ',
-        'insects ', 'crawling ', 'sm', 'o', 'sh '
-      ],
-      wordOffset: 4,
-      wordCutoff: 9,
-      angle: 0
-    },
-    bulbasaur: {
-      icon:  "http://78.media.tumblr.com/8f3d84d35802ef4681ff96f69fa187b1/tumblr_n6bu3cJbUA1raoul2o1_500.gif",
-      dead: "https://archive-media-1.nyafuu.org/vp/image/1401/17/1401170820123.png",
-      type: "bulba",
-      words: [
-        '', '! ', 'go ', 'ivy ', 'vine ', 'bulba ', 'plants ',
-        'ivysaur ', 'venusaur ', 'bulbasa', 'a', 'ur '
-      ],
-      wordOffset: 9,
-      wordCutoff: 9,
-      angle: 90,
-    },
-    charmander: {
-      icon:  "https://thumbs.gfycat.com/PhysicalFrayedArmyant-max-1mb.gif",
-      dead: "https://i.pinimg.com/originals/a2/b9/88/a2b988c7dd0bad762e5f19e994e35f3b.jpg",
-      type: "char",
-      words: [
-        '', '! ', 'go ', 'hot ', 'char ', 'ember ', 'mander ', 'inferno ',
-        'evolving ', 'chariza', 'a', 'rd '
-      ],
-      wordOffset: 9,
-      wordCutoff: 9,
-      angle: 90
-    },
-    finger: { // node
-      icon:  "https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png",
-      dead: "https://cdn.shopify.com/s/files/1/1061/1924/files/Middle_Finger_Emoji.png?9898922749706957214",
-      type: "ant",
-      words: [
-        '', '! ', 'ew ', 'die ', 'node ', 'sucks ', 'nodejs ', 'node.js ', 'theworst ', 'f', 'u', 'ck '
-      ],
-      wordOffset: 3,
-      wordCutoff: 9,
-      angle: 0
-    },
-    antGIF: {
-      icon: "http://www.illustrationweb.us/imagebase/media/102-101608.gif",
-      dead: "https://adiospests.com/wp-content/uploads/sites/10/2016/04/deadbug.png",
-      type: "ant",
-      words: [
-        '', '! ', 'ew ', 'ant ', 'hill ', 'queen ', 'picnic ',
-        'insects ', 'crawling ', 'sm', 'o', 'sh '
-      ],
-      wordOffset: 4,
-      wordCutoff: 9,
-      angle: 0
-    },
-  }
+  // var characters = {
+  //   ant: {
+  //     icon:  "http://moziru.com/images/shaow-clipart-ant-7.png",
+  //     dead: "https://adiospests.com/wp-content/uploads/sites/10/2016/04/deadbug.png",
+  //     type: "ant",
+  //     words: [
+  //       '', '! ', 'ew ', 'ant ', 'hill ', 'queen ', 'picnic ',
+  //       'insects ', 'crawling ', 'sm', 'o', 'sh '
+  //     ],
+  //     wordOffset: 4,
+  //     wordCutoff: 9,
+  //     angle: 0
+  //   },
+  //   bulbasaur: {
+  //     icon:  "http://78.media.tumblr.com/8f3d84d35802ef4681ff96f69fa187b1/tumblr_n6bu3cJbUA1raoul2o1_500.gif",
+  //     dead: "https://archive-media-1.nyafuu.org/vp/image/1401/17/1401170820123.png",
+  //     type: "bulba",
+  //     words: [
+  //       '', '! ', 'go ', 'ivy ', 'vine ', 'bulba ', 'plants ',
+  //       'ivysaur ', 'venusaur ', 'bulbasa', 'a', 'ur '
+  //     ],
+  //     wordOffset: 9,
+  //     wordCutoff: 9,
+  //     angle: 90,
+  //   },
+  //   charmander: {
+  //     icon:  "https://thumbs.gfycat.com/PhysicalFrayedArmyant-max-1mb.gif",
+  //     dead: "https://i.pinimg.com/originals/a2/b9/88/a2b988c7dd0bad762e5f19e994e35f3b.jpg",
+  //     type: "char",
+  //     words: [
+  //       '', '! ', 'go ', 'hot ', 'char ', 'ember ', 'mander ', 'inferno ',
+  //       'evolving ', 'chariza', 'a', 'rd '
+  //     ],
+  //     wordOffset: 9,
+  //     wordCutoff: 9,
+  //     angle: 90
+  //   },
+  //   finger: { // node
+  //     icon:  "https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png",
+  //     dead: "https://cdn.shopify.com/s/files/1/1061/1924/files/Middle_Finger_Emoji.png?9898922749706957214",
+  //     type: "ant",
+  //     words: [
+  //       '', '! ', 'ew ', 'die ', 'node ', 'sucks ', 'nodejs ', 'node.js ', 'theworst ', 'f', 'u', 'ck '
+  //     ],
+  //     wordOffset: 3,
+  //     wordCutoff: 9,
+  //     angle: 0
+  //   },
+  //   antGIF: {
+  //     icon: "http://www.illustrationweb.us/imagebase/media/102-101608.gif",
+  //     dead: "https://adiospests.com/wp-content/uploads/sites/10/2016/04/deadbug.png",
+  //     type: "ant",
+  //     words: [
+  //       '', '! ', 'ew ', 'ant ', 'hill ', 'queen ', 'picnic ',
+  //       'insects ', 'crawling ', 'sm', 'o', 'sh '
+  //     ],
+  //     wordOffset: 4,
+  //     wordCutoff: 9,
+  //     angle: 0
+  //   },
+  // }
 
-  var character = characters.bulbasaur;
+  var character;
+  var wave = 0;
 
   class Ant {
     // this is what's called when you use the "new" keyword
-    constructor($el, num, top, left) {
-      this.id = (("#" + character.type) + num);
-      this.node = $('<img id="' + (character.type + num) + '" class="character ' + character.type + '"></img>');
+    constructor($el, num, top, left, thisWave) {
+      // this.id = (("#" + character.type) + num);
+      console.log(thisWave);
+      this.id = `#${character.type}_${thisWave}_${num}`;
+      // this.id = `#${character.type}${num}`;
+
+      console.log(this.id);
+      // this.node = $('<img id="' + (character.type + num) + '" class="character ' + character.type + '"></img>');
+      // this.node = $(`<img id="${character.type}${num}" class="character ${character.type}"></img>`);
+      this.node = $(`<img id="${character.type}_${thisWave}_${num}" class="character ${character.type}"></img>`);
+
       this.node.attr("src", character.icon);
       this.currentDirection = Math.floor(Math.random() * 8);
       this.SPEED = 100;
@@ -155,8 +164,11 @@
       function(request, sender, sendResponse) {
         if( request.message === "update_char" ) {
           console.log('Changing char to ' + request.newChar);
+          characters = request.chars;
           character = characters[request.newChar];
-          infect();
+          console.log(character);
+          wave ++;
+          infect(wave);
         }
       }
     );
@@ -165,15 +177,17 @@
   });
 
   function infect() {
+    var thisWave = wave;
     var wordsDeleted = 0;
     let ants = 0;
 
     var allWords = getWords();
     //console.log(allWords);
 
-    wordToAnt();
+    wordToAnt(thisWave);
 
-    function wordToAnt() {
+    function wordToAnt(thisWave) {
+      if (thisWave < wave) return;
       let curr = allWords[wordsDeleted];
       //console.log(curr);
       ants++;
@@ -185,20 +199,22 @@
       let bg = curr.style.backgroundColor;
       curr.style.backgroundColor = 'LightBlue';
       curr.innerText = newWord;
-      setTimeout(wordToAnt, 1000);
-      new Ant($("body"), ants, newPosition.top, newPosition.left);
+      new Ant($("body"), ants, newPosition.top, newPosition.left, thisWave);
       if (wordsDeleted < allWords.length-1) {
         wordsDeleted ++;
         setTimeout(function() {
+          wordToAnt(thisWave);
+        }, 1000);
+        setTimeout(function() {
           curr.style.backgroundColor = bg;
         }, 500);
-      } else {
-        setInterval(function() {
-          ants++;
-          let newPosition = randCoords();
-          new Ant($("body"), ants, newPosition.top, newPosition.left);
-        }, 2000);
-      }
+      } //else {
+        // setInterval(function() {
+        //   ants++;
+        //   let newPosition = randCoords();
+        //   new Ant($("body"), ants, newPosition.top, newPosition.left);
+        // }, 2000);
+      // }
     }
 
     function pickWord(wordLength) {
