@@ -83,10 +83,8 @@
     }
 
     killAnt(ant) {
-      console.log(ant.id);
-      console.log('asdasd');
       $(ant.id).click(function(event) {
-        console.log("hit");
+        console.log(`${ant.id} was killed!`);
         $(ant.id).attr("src", character.dead);
         ant.dead = true;
         $(ant.id).fadeOut(1000);
@@ -162,7 +160,7 @@
         }
       }
     );
-
+    state.ready = true;
     chrome.runtime.sendMessage({"message": "ready_to_infect"});
   });
 
