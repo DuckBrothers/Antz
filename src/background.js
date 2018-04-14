@@ -1,8 +1,10 @@
 // this background code defines the logic for the popup and injects our scripts
 
-
 // keeps track of which character we want to infect the page
 var clickedChar = "ant";
+
+// list of char data from JSON file
+var chars;
 
 // keeps track of whether scripts have been injected
 var ready = false;
@@ -32,17 +34,31 @@ function injectScripts() {
 
 // tells main.js to change the character, restart infection
 function chooseChar(e) {
-  if (!ready) return; // choosing character does nothing if scripts aren't ready
+  if (!ready || !chars) return; // choosing character does nothing if scripts aren't ready
 
   clickedChar = e.path[0].className;
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     var activeTab = tabs[0];
     let req = {
       "message": "update_char",
-      "newChar": clickedChar
+      "newChar": clickedChar,
+      "chars": chars
     }
     chrome.tabs.sendMessage(activeTab.id, req);
   });
+}
+
+function retrieveChars() {
+  fetch('./src/characters.json')
+  .then(response => response.json())
+  .then(res => {
+    chars = res;
+    console.log(chars);
+  });
+}
+
+function addChar () {
+
 }
 
 // adds click listener to each character div
@@ -50,6 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // keeps us in sync with injected scripts
   injectController();
+
+  retrieveChars();
 
   // adds logic to popup dom
   var divs = document.querySelectorAll('div');
