@@ -20,14 +20,26 @@ function injectController() {
 
 // for writing to json:
 
+let xxx = {
+  "frequency": 1000,
+  "speed": 100,
+  "distance": 10,
+  "random": false,
+  "max": 50,
+  "replace": true,
+  "size": 40
+};
+
+// meant to overwrite json, seems not to work
 // function download(content, fileName, contentType) {
+//   console.log('doing this');
 //     var a = document.createElement("a");
 //     var file = new Blob([content], {type: contentType});
 //     a.href = URL.createObjectURL(file);
 //     a.download = fileName;
 //     a.click();
 // }
-// download(jsonData, 'json.txt', 'text/plain');
+// download(xxx, 'test.json', 'application/json');
 
 
 // injects all our scripts - only called the first time popup loads per page
@@ -40,7 +52,7 @@ function injectScripts() {
       {file: "./src/scrapewords.js"});
   chrome.tabs.executeScript(null,
     {file: "./src/main.js"});
-  chrome.tabs.insertCSS(tabId, {
+  chrome.tabs.insertCSS(null, {
      file : "./src/styles.css"
     });
   // window.close();
@@ -49,7 +61,9 @@ function injectScripts() {
 
 // tells main.js to change the character, restart infection
 function chooseChar(e) {
-  if (!ready || !chars || !options) return; // choosing character does nothing if scripts aren't ready
+
+  // choosing character does nothing if scripts aren't ready
+  if (!ready || !localStorage.getItem('chars') || !localStorage.getItem('options')) return;
 
   clickedChar = e.path[0].className;
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -57,8 +71,8 @@ function chooseChar(e) {
     let req = {
       "message": "update_char",
       "newChar": clickedChar,
-      "chars": chars,
-      "options": options
+      "chars": JSON.parse(localStorage.getItem('chars')),
+      "options": JSON.parse(localStorage.getItem('options'))
     }
     chrome.tabs.sendMessage(activeTab.id, req);
   });
@@ -68,8 +82,9 @@ function retrieveChars() {
   fetch('./src/characters.json')
   .then(response => response.json())
   .then(res => {
-    chars = res;
-    console.log(chars);
+    // chars = res;
+    localStorage.setItem('chars', JSON.stringify(res));
+    console.log('wrote to local chars');
   });
 }
 
@@ -77,8 +92,9 @@ function retrieveOptions() {
   fetch('./src/options.json')
   .then(response => response.json())
   .then(res => {
-    options = res;
-    console.log(options);
+    // options = res;
+    localStorage.setItem('options', JSON.stringify(res));
+    console.log('wrote to local options');
   });
 }
 
@@ -92,8 +108,8 @@ document.addEventListener('DOMContentLoaded', function () {
   // keeps us in sync with injected scripts
   injectController();
 
-  retrieveChars();
-  retrieveOptions();
+  if (!localStorage.getItem('chars')) retrieveChars();
+  if (!localStorage.getItem('options')) retrieveOptions();
 
   // adds logic to popup dom
   var divs = document.querySelectorAll('div');
