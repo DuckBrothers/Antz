@@ -6,6 +6,20 @@ var clickedChar = "ant";
 // keeps track of whether scripts have been injected
 var ready = false;
 
+var optionsInfo = {
+  localStorageKey: 'options',
+  innerForm: 'innerOptions',
+  otherToggle: 'addCharToggle',
+  expanded: false,
+}
+
+var addCharInfo = {
+  localStorageKey: 'chars',
+  innerForm: 'innerAddChar',
+  otherToggle: 'optionsToggle',
+  expanded: false,
+}
+
 // called when popup loads, sends out initial script to determine if our program has already been sent down
 function injectController() {
   chrome.tabs.executeScript(null,
@@ -69,6 +83,29 @@ function retrieveOptions() {
   });
 }
 
+
+function toggle(info) {
+  if (info.expanded) {
+    let innerForm = document.getElementById(info.innerForm)
+    innerForm.style.display = 'none';
+    document.getElementById(info.otherToggle).style.display = 'inline';
+    info.expanded = false;
+    return;
+  }
+
+  if (!localStorage.getItem(info.localStorageKey)) return;
+
+  let innerForm = document.getElementById(info.innerForm)
+  innerForm.style.display = 'inline';
+  document.getElementById(info.otherToggle).style.display = 'none';
+  info.expanded = true;
+}
+
+
+function changeOptions() {
+
+}
+
 function addChar () {
 
 }
@@ -100,6 +137,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // keeps us in sync with injected scripts
   injectController();
+  document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo)});
+  document.getElementById('addCharToggle').addEventListener('click', () => {toggle(addCharInfo)});
+
 
   if (!localStorage.getItem('options')) retrieveOptions();
 
