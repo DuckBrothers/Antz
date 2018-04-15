@@ -3,12 +3,6 @@
 // keeps track of which character we want to infect the page
 var clickedChar = "ant";
 
-// list of char data from JSON file
-var chars;
-
-// list of option data from JSON file
-var options;
-
 // keeps track of whether scripts have been injected
 var ready = false;
 
@@ -17,30 +11,6 @@ function injectController() {
   chrome.tabs.executeScript(null,
     {file: "./src/controller.js"});
 }
-
-// for writing to json:
-
-let xxx = {
-  "frequency": 1000,
-  "speed": 100,
-  "distance": 10,
-  "random": false,
-  "max": 50,
-  "replace": true,
-  "size": 40
-};
-
-// meant to overwrite json, seems not to work
-// function download(content, fileName, contentType) {
-//   console.log('doing this');
-//     var a = document.createElement("a");
-//     var file = new Blob([content], {type: contentType});
-//     a.href = URL.createObjectURL(file);
-//     a.download = fileName;
-//     a.click();
-// }
-// download(xxx, 'test.json', 'application/json');
-
 
 // injects all our scripts - only called the first time popup loads per page
 function injectScripts() {
