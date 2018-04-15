@@ -1,0 +1,9 @@
+{
+  "frequency": 1000,
+  "speed": 100,
+  "distance": 10,
+  "random": false,
+  "max": 5,
+  "replace": true,
+  "size": 20
+}

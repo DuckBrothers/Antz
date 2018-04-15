@@ -6,6 +6,9 @@ var clickedChar = "ant";
 // list of char data from JSON file
 var chars;
 
+// list of option data from JSON file
+var options;
+
 // keeps track of whether scripts have been injected
 var ready = false;
 
@@ -14,6 +17,18 @@ function injectController() {
   chrome.tabs.executeScript(null,
     {file: "./src/controller.js"});
 }
+
+// for writing to json:
+
+// function download(content, fileName, contentType) {
+//     var a = document.createElement("a");
+//     var file = new Blob([content], {type: contentType});
+//     a.href = URL.createObjectURL(file);
+//     a.download = fileName;
+//     a.click();
+// }
+// download(jsonData, 'json.txt', 'text/plain');
+
 
 // injects all our scripts - only called the first time popup loads per page
 function injectScripts() {
@@ -34,7 +49,7 @@ function injectScripts() {
 
 // tells main.js to change the character, restart infection
 function chooseChar(e) {
-  if (!ready || !chars) return; // choosing character does nothing if scripts aren't ready
+  if (!ready || !chars || !options) return; // choosing character does nothing if scripts aren't ready
 
   clickedChar = e.path[0].className;
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -42,7 +57,8 @@ function chooseChar(e) {
     let req = {
       "message": "update_char",
       "newChar": clickedChar,
-      "chars": chars
+      "chars": chars,
+      "options": options
     }
     chrome.tabs.sendMessage(activeTab.id, req);
   });
@@ -57,6 +73,15 @@ function retrieveChars() {
   });
 }
 
+function retrieveOptions() {
+  fetch('./src/options.json')
+  .then(response => response.json())
+  .then(res => {
+    options = res;
+    console.log(options);
+  });
+}
+
 function addChar () {
 
 }
@@ -68,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
   injectController();
 
   retrieveChars();
+  retrieveOptions();
 
   // adds logic to popup dom
   var divs = document.querySelectorAll('div');
