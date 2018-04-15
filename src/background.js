@@ -54,6 +54,7 @@ function retrieveChars() {
   .then(res => {
     // chars = res;
     localStorage.setItem('chars', JSON.stringify(res));
+    buildCharList();
     console.log('wrote to local chars');
   });
 }
@@ -72,20 +73,39 @@ function addChar () {
 
 }
 
+function buildCharList() {
+  const charContainer = document.getElementById('characters');
+  const chars = JSON.parse(localStorage.getItem('chars'));
+  if (!chars) return;
+  const charList = Object.keys(chars);
+  for (let i = 0; i < charList.length; i ++) {
+    let character = charList[i];
+    let characterInfo = chars[character];
+    let charDiv = document.createElement('div');
+    charDiv.setAttribute('id', character)
+    let charImg = document.createElement('img');
+    charImg.setAttribute('class', 'character');
+    charImg.setAttribute('class', character);
+    charImg.setAttribute('src', characterInfo.popup);
+    charImg.style.height = 'auto';
+    charImg.style.width = '55px';
+    charDiv.appendChild(charImg);
+    charDiv.addEventListener('click', chooseChar);
+    charContainer.appendChild(charDiv);
+  }
+}
+
 // adds click listener to each character div
 document.addEventListener('DOMContentLoaded', function () {
 
   // keeps us in sync with injected scripts
   injectController();
 
-  if (!localStorage.getItem('chars')) retrieveChars();
   if (!localStorage.getItem('options')) retrieveOptions();
 
-  // adds logic to popup dom
-  var divs = document.querySelectorAll('div');
-  for (var i = 0; i < divs.length; i++) {
-    divs[i].addEventListener('click', chooseChar);
-  }
+  if (!localStorage.getItem('chars')) {retrieveChars();}
+  else {buildCharList();};
+
 });
 
 
