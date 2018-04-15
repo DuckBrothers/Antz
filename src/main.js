@@ -64,6 +64,8 @@
 
   var character;
   var wave = 0;
+  var options;
+  var active = 0;
 
   class Ant {
     // this is what's called when you use the "new" keyword
@@ -76,11 +78,16 @@
       console.log(this.id);
       // this.node = $('<img id="' + (character.type + num) + '" class="character ' + character.type + '"></img>');
       // this.node = $(`<img id="${character.type}${num}" class="character ${character.type}"></img>`);
-      this.node = $(`<img id="${character.type}_${thisWave}_${num}" class="character ${character.type}"></img>`);
+
+      this.node = $(`
+        <img id="${character.type}_${thisWave}_${num}" style="width:${options.size}px;height:${options.size}px;" class="character ${character.type}"></img>
+      `);
 
       this.node.attr("src", character.icon);
       this.currentDirection = Math.floor(Math.random() * 8);
-      this.SPEED = 100;
+      this.SPEED = options.speed;
+      this.DIST = options.distance;
+      this.HALF = Math.floor(options.distance / 2);
       this.directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
       $el.append(this.node);
       this.node.css({ top: top, left: left });
@@ -95,6 +102,7 @@
       $(ant.id).click(function(event) {
         console.log(`${ant.id} was killed!`);
         $(ant.id).attr("src", character.dead);
+        active --;
         ant.dead = true;
         $(ant.id).fadeOut(1000);
         //event.stopPropegation();
@@ -122,25 +130,25 @@
       let direction = this.directions[this.currentDirection];
 
       if (direction === "n") {
-        position.top -= 10;
+        position.top -= this.DIST;
       } else if (direction === "ne") {
-        position.top -= 5;
-        position.left += 5;
+        position.top -= this.HALF;
+        position.left += this.HALF;
       } else if (direction === "e") {
-        position.left += 10;
+        position.left += this.DIST;
       } else if (direction === "se") {
-        position.top += 5;
-        position.left += 5;
+        position.top += this.HALF;
+        position.left += this.HALF;
       } else if (direction === "s") {
-        position.top += 10;
+        position.top += this.DIST;
       } else if (direction === "sw") {
-        position.top += 5;
-        position.left -= 5;
+        position.top += this.HALF;
+        position.left -= this.HALF;
       } else if (direction === "w") {
-        position.left -= 10;
+        position.left -= this.DIST;
       } else if (direction === "nw") {
-        position.top -= 5;
-        position.left -= 5;
+        position.top -= this.HALF;
+        position.left -= this.HALF;
       }
 
       position.left =
@@ -165,8 +173,10 @@
         if( request.message === "update_char" ) {
           console.log('Changing char to ' + request.newChar);
           characters = request.chars;
+          options = request.options;
           character = characters[request.newChar];
           console.log(character);
+          console.log(options);
           wave ++;
           infect(wave);
         }
@@ -188,27 +198,40 @@
 
     function wordToAnt(thisWave) {
       if (thisWave < wave) return;
-      let curr = allWords[wordsDeleted];
+      if (options.max && active >= options.max) {
+        return setTimeout(function() {
+          wordToAnt(thisWave);
+        }, options.frequency);
+      }
+      let curr = allWords[wordsDeleted % allWords.length];
+      if (options.random) {
+        console.log(Math.floor(Math.random() * allWords.length))
+        curr = allWords[Math.floor(Math.random() * allWords.length)]
+        console.log('curr' + curr);
+      }
       //console.log(curr);
       ants++;
+      active ++;
       let newPosition = {};
       newPosition.left = Math.floor($(curr).offset().left + (curr.offsetWidth / 2));
       newPosition.top = Math.floor($(curr).offset().top + (curr.offsetHeight / 2));
-
-      let newWord = pickWord(curr.innerText.length-1);
       let bg = curr.style.backgroundColor;
       curr.style.backgroundColor = 'LightBlue';
-      curr.innerText = newWord;
+
+      if (options.replace) {
+        let newWord = pickWord(curr.innerText.length-1);
+        curr.innerText = newWord;
+      }
       new Ant($("body"), ants, newPosition.top, newPosition.left, thisWave);
-      if (wordsDeleted < allWords.length-1) {
+      // if (wordsDeleted < allWords.length-1) {
         wordsDeleted ++;
         setTimeout(function() {
           wordToAnt(thisWave);
-        }, 1000);
+        }, options.frequency);
         setTimeout(function() {
           curr.style.backgroundColor = bg;
-        }, 500);
-      } //else {
+        }, Math.floor(options.frequency / 2));
+      // } else {
         // setInterval(function() {
         //   ants++;
         //   let newPosition = randCoords();
