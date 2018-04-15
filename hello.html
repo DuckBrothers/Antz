@@ -20,6 +20,7 @@
       font-family: sans-serif;
       font-size: 0.8em;
       width: 100px;
+      margin: auto;
       margin-top: 1px;
       background: white;
     }
@@ -30,11 +31,43 @@
       height: auto;
       width: 55px;
     }
+    .innerForm {
+      display: none;
+    }
+    .formWrapper {
+      background-color: white;
+    }
     </style>
     <script src="./src/background.js"></script>
   </head>
   <body>
     <div id="characters">
+    </div>
+    <div id="options" class="formWrapper">
+      <div id="optionsToggle"><h3>Change Options</h3></div>
+      <div id="innerOptions" class="innerForm">
+        <p>Move Speed</p>
+        <input type="number" id="speedInput" placeholder='100' max='500' min='50'>
+        <p>Move Dist</p>
+        <input type="number" id="distInput" placeholder='10' max='40' min='4'>
+        <p>Spawn Frequency</p>
+        <input type="number" id="spawnInput" placeholder='1000' max='100000' min='200'>
+        <p>Max</p>
+        <input type="number" id="maxInput" placeholder='20' max='500' min='1'>
+      </div>
+    </div>
+    <div id="addChar" class="formWrapper">
+      <div id="addCharToggle"><h3>Add Character</h3></div>
+      <div id="innerAddChar" class="innerForm">
+        <p>Image URL</p>
+        <input type="url" id="imgInput">
+        <p>Squish Image URL</p>
+        <input type="url" id="squishInput">
+        <p>Character Name</p>
+        <input type="text" placeholder='Ant' id="nameInput">
+        <p>Angle</p>
+        <input type="number" placeholder='0' max='359' min='0' id="angleInput">
+      </div>
     </div>
   </body>
 </html>
