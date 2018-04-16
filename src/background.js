@@ -161,7 +161,6 @@ function extractFormData(info) {
 
 function buildCharList() {
   const charContainer = document.getElementById('characters');
-
   while (charContainer.firstChild) {
     charContainer.removeChild(charContainer.firstChild);
 }
