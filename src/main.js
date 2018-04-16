@@ -156,7 +156,7 @@
       let bg = curr.style.backgroundColor;
       curr.style.backgroundColor = 'LightBlue';
 
-      if (options.replace) {
+      if (options.replace && character.words.length) {
         let newWord = pickWord(curr.innerText.length-1);
         curr.innerText = newWord;
       }
