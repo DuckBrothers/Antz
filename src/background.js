@@ -87,6 +87,12 @@ function retrieveOptions() {
   });
 }
 
+function syncPreview(urlType) {
+  let urlInput = document.getElementById(urlType);
+  let url = urlInput.value || urlInput.getAttribute('placeholder');
+  document.getElementById(`${urlType}Preview`).setAttribute('src', url);
+}
+
 
 function toggle(info) {
   if (info.expanded) {
@@ -145,7 +151,8 @@ function extractFormData(info) {
     let elem = document.getElementById(`${eKey}Input`);
     if (elem) {
       if (eKey === 'replace' || eKey === 'random') {extractedData[eKey] = elem.checked;}
-      else if (eKey === 'icon' || eKey === 'dead' || eKey === 'type') {extractedData[eKey] = elem.value || elem.getAttribute('placeholder');}
+      else if (eKey === 'icon' || eKey === 'dead') {extractedData[eKey] = elem.value || elem.getAttribute('placeholder');}
+      else if (eKey === 'type') {extractedData[eKey] = (elem.value || elem.getAttribute('placeholder')).replace(/\W/g, '');}
       else {extractedData[eKey] = parseInt(elem.value || elem.getAttribute('placeholder'));};
     }
   }
@@ -174,10 +181,26 @@ function buildCharList() {
     charImg.setAttribute('src', characterInfo.popup);
     charImg.style.height = 'auto';
     charImg.style.width = '55px';
+    insertDelete(character, charDiv);
     charDiv.appendChild(charImg);
     charDiv.addEventListener('click', chooseChar);
     charContainer.appendChild(charDiv);
   }
+}
+
+function insertDelete(character, charDiv) {
+  let del = document.createElement('input');
+  del.type = 'button';
+  del.value = 'X';
+  del.setAttribute('class', 'delButton');
+  del.addEventListener('click', (ev) => {
+    let currChars = JSON.parse(localStorage.getItem('chars'));
+    delete currChars[character];
+    localStorage.setItem('chars', JSON.stringify(currChars));
+    ev.stopPropagation();
+    buildCharList();
+  })
+  charDiv.appendChild(del);
 }
 
 // adds click listener to each character div
@@ -191,6 +214,10 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('submitOptions').addEventListener('click', changeOptions);
   document.getElementById('submitAddChar').addEventListener('click', addChar);
 
+  ['change', 'paste', 'keyup', 'keydown', 'mouseup'].forEach((myEvent) => {
+      document.getElementById('iconInput').addEventListener(myEvent, () => {syncPreview('iconInput')});
+      document.getElementById('deadInput').addEventListener(myEvent, () => {syncPreview('deadInput')});
+  })
 
   if (!localStorage.getItem('options')) retrieveOptions();
 
