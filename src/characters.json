@@ -38,6 +38,19 @@
     "wordCutoff": 9,
     "angle": 90
   },
+  "ghost": {
+    "popup":  "https://78.media.tumblr.com/bd172c9b6928e5b148be37d5a13e739a/tumblr_o21bscL3FW1uf5cjoo1_400.gif",
+    "icon":  "http://www.stickpng.com/assets/images/580b57fcd9996e24bc43c4b1.png",
+    "dead": "https://78.media.tumblr.com/bd172c9b6928e5b148be37d5a13e739a/tumblr_o21bscL3FW1uf5cjoo1_400.gif",
+    "type": "ghost",
+    "words": [
+      "", "! ", "ah ", "boo ", "dead ", "ghost ", "spooky ",
+      "haunted ", "crawling ", "bo", "o", "oo "
+    ],
+    "wordOffset": 4,
+    "wordCutoff": 8,
+    "angle": 0
+  },
   "node": {
     "popup":  "https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png",
     "icon":  "https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png",

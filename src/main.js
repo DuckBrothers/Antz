@@ -168,7 +168,7 @@
         }, options.frequency);
         setTimeout(function() {
           curr.style.backgroundColor = bg;
-        }, Math.floor(options.frequency / 2));
+        }, 500);
       // } else {
         // setInterval(function() {
         //   ants++;

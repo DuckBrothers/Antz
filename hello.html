@@ -5,7 +5,8 @@
     <style>
 
     body {
-      overflow: hidden;
+      overflow-y: scroll;
+      overflow-x: hidden;
       margin: 0px;
       padding: 0px;
       background: white;
@@ -19,13 +20,17 @@
       padding: 1px 3px;
       font-family: sans-serif;
       font-size: 0.8em;
-      width: 100px;
+      width: 120px;
       margin: auto;
       margin-top: 1px;
     }
     .character {
       height: auto;
-      width: 55px;
+      width: 50px;
+    }
+    .preview {
+      height: auto;
+      width: 25px;
     }
     .characterWrapper:hover {
       background: #F9EBEA;
@@ -42,7 +47,16 @@
     .check {
       background-color: rgba(100, 100, 100, 1);
     }
-
+    input {
+      max-width: 100%
+    }
+    .delButton {
+      float: right;
+      font-size: 7px;
+    }
+    .delButton:hover {
+      background-color: #F9EBEA;
+    }
     </style>
     <script src="./src/background.js"></script>
   </head>
@@ -50,7 +64,7 @@
     <div id="characters">
     </div>
     <div id="options" class="formWrapper">
-      <div id="optionsToggle" class="toggle"><h3>Change Options</h3></div>
+      <div id="optionsToggle" class="toggle"><h3>Options</h3></div>
       <div id="innerOptions" class="innerForm">
         <p>Icon Size (px)</p>
         <input type="number" id="sizeInput" placeholder='20' max='100' min='5'>
@@ -74,9 +88,11 @@
       <div id="addCharToggle" class="toggle"><h3>Add Character</h3></div>
       <div id="innerAddChar" class="innerForm">
         <p>Image URL</p>
-        <input type="url" id="iconInput" placeholder='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg'>
+        <input type="url" id="iconInput" placeholder='http://www.pngmart.com/files/4/Happy-PNG-HD.png'>
+        <img class='preview' src='http://www.pngmart.com/files/4/Happy-PNG-HD.png' id='iconInputPreview' ></img>
         <p>Squish URL</p>
         <input type="url" id="deadInput" placeholder='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg'>
+        <img class='preview' src='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg' id='deadInputPreview' ></img>
         <p>Character</p>
         <input type="text" placeholder='e.g. ant' id="typeInput">
         <p>Angle (clockwise from up)</p>
