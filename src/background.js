@@ -119,7 +119,8 @@ function buildCharList() {
     let character = charList[i];
     let characterInfo = chars[character];
     let charDiv = document.createElement('div');
-    charDiv.setAttribute('id', character)
+    charDiv.setAttribute('id', character);
+    charDiv.setAttribute('class', 'characterWrapper')
     let charImg = document.createElement('img');
     charImg.setAttribute('class', 'character');
     charImg.setAttribute('class', character);

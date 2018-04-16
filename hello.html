@@ -24,18 +24,21 @@
       margin-top: 1px;
       background: white;
     }
-    div:hover {
-      background: #F9EBEA;
-    }
     .character {
       height: auto;
       width: 55px;
     }
+    .characterWrapper:hover {
+      background: #F9EBEA;
+    }
+    .formWrapper:hover {
+      background: LightBlue;
+    }
     .innerForm {
       display: none;
     }
-    .formWrapper {
-      background-color: white;
+    .toggle {
+      background-color: rgba(100, 100, 100, 0);
     }
     </style>
     <script src="./src/background.js"></script>
@@ -44,7 +47,7 @@
     <div id="characters">
     </div>
     <div id="options" class="formWrapper">
-      <div id="optionsToggle"><h3>Change Options</h3></div>
+      <div id="optionsToggle" class="toggle"><h3>Change Options</h3></div>
       <div id="innerOptions" class="innerForm">
         <p>Move Speed</p>
         <input type="number" id="speedInput" placeholder='100' max='500' min='50'>
@@ -57,7 +60,7 @@
       </div>
     </div>
     <div id="addChar" class="formWrapper">
-      <div id="addCharToggle"><h3>Add Character</h3></div>
+      <div id="addCharToggle" class="toggle"><h3>Add Character</h3></div>
       <div id="innerAddChar" class="innerForm">
         <p>Image URL</p>
         <input type="url" id="imgInput">
