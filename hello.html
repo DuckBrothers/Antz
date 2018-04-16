@@ -1,11 +1,12 @@
 <!doctype html>
 <html>
   <head>
-    <title>Set Page Color Popup</title>
+    <title>Ant Popup</title>
     <style>
 
     body {
-      overflow: hidden;
+      overflow-y: scroll;
+      overflow-x: hidden;
       margin: 0px;
       padding: 0px;
       background: white;
@@ -19,36 +20,86 @@
       padding: 1px 3px;
       font-family: sans-serif;
       font-size: 0.8em;
-      width: 100px;
+      width: 120px;
+      margin: auto;
       margin-top: 1px;
-      background: white;
     }
-    div:hover {
+    .character {
+      height: auto;
+      width: 50px;
+    }
+    .preview {
+      height: auto;
+      width: 25px;
+    }
+    .characterWrapper:hover {
       background: #F9EBEA;
     }
-    .ant {
-      height: auto;
-      width: 55px;
+    .formWrapper:hover {
+      background: LightBlue;
     }
-    .bulbasaur {
-      height: auto;
-      width: 55px;
+    .innerForm {
+      display: none;
     }
-    .charmander {
-      height: auto;
-      width: 55px;
+    .toggle {
+      background-color: rgba(100, 100, 100, 0);
     }
-    .finger {
-      height: auto;
-      width: 55px;
+    .check {
+      background-color: rgba(100, 100, 100, 1);
+    }
+    input {
+      max-width: 100%
+    }
+    .delButton {
+      float: right;
+      font-size: 7px;
+    }
+    .delButton:hover {
+      background-color: #F9EBEA;
     }
     </style>
     <script src="./src/background.js"></script>
   </head>
   <body>
-    <div id="ant"><img class="ant" src="http://www.illustrationweb.us/imagebase/media/102-101608.gif" /></div>
-    <div id="bulbasaur"><img class="bulbasaur" src="http://78.media.tumblr.com/8f3d84d35802ef4681ff96f69fa187b1/tumblr_n6bu3cJbUA1raoul2o1_500.gif"/></div>
-    <div id="charmander"><img class="charmander" src="https://thumbs.gfycat.com/PhysicalFrayedArmyant-max-1mb.gif" /></div>
-    <div id="node"><img class="finger" src="https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png" /></div>
+    <div id="characters">
+    </div>
+    <div id="options" class="formWrapper">
+      <div id="optionsToggle" class="toggle"><h3>Options</h3></div>
+      <div id="innerOptions" class="innerForm">
+        <p>Icon Size (px)</p>
+        <input type="number" id="sizeInput" placeholder='20' max='100' min='5'>
+        <p>Move Speed (ms)</p>
+        <input type="number" id="speedInput" placeholder='100' max='500' min='50'>
+        <p>Move Dist (px)</p>
+        <input type="number" id="distanceInput" placeholder='10' max='40' min='4'>
+        <p>Spawn Frequency (ms)</p>
+        <input type="number" id="frequencyInput" placeholder='1000' max='100000' min='200'>
+        <p>Max (on screen)</p>
+        <input type="number" id="maxInput" placeholder='20' max='500' min='1'>
+        <p>Random Spawn</p>
+        <input type="checkbox" class= "check" id="randomInput">
+        <p>Replace Words</p>
+        <input type="checkbox" class="check" id="replaceInput">
+        <br><br>
+        <input type='button' id='submitOptions' class='submit' value='save'>
+      </div>
+    </div>
+    <div id="addChar" class="formWrapper">
+      <div id="addCharToggle" class="toggle"><h3>Add Character</h3></div>
+      <div id="innerAddChar" class="innerForm">
+        <p>Image URL</p>
+        <input type="url" id="iconInput" placeholder='http://www.pngmart.com/files/4/Happy-PNG-HD.png'>
+        <img class='preview' src='http://www.pngmart.com/files/4/Happy-PNG-HD.png' id='iconInputPreview' ></img>
+        <p>Squish URL</p>
+        <input type="url" id="deadInput" placeholder='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg'>
+        <img class='preview' src='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg' id='deadInputPreview' ></img>
+        <p>Character</p>
+        <input type="text" placeholder='e.g. ant' id="typeInput">
+        <p>Angle (clockwise from up)</p>
+        <input type="number" placeholder='0' max='359' min='0' id="angleInput">
+        <br><br><br>
+        <input type='button' id='submitAddChar' class='submit' value='save'>
+      </div>
+    </div>
   </body>
 </html>

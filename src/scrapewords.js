@@ -1,3 +1,7 @@
+
+if (qwerty) console.log('KKKKKKKKKKKKKKKKKKK');
+if (!qwerty) console.log('JJJJJJJJJJJJJJJJJJJ');
+
 var qwerty = 'please please print;'
 
 var allWords = getWords();
@@ -5,10 +9,10 @@ function getWords() {
     var allP = $('p').toArray();
     var allH = $(':header').toArray();
 
-    console.log(allP);
-    console.log(allH);
+    // console.log(allP);
+    // console.log(allH);
     let textContainers = allP.concat(allH);
-    console.log(textContainers);
+    // console.log(textContainers);
     var $spans;
 
     // var headers = $('h1');
@@ -16,7 +20,7 @@ function getWords() {
     var words = [];
 
     textContainers.forEach(function(container){
-        console.log(container);
+        // console.log(container);
         let text = container.innerText;
         //console.log(text);
         //console.log('text', text);
@@ -25,7 +29,7 @@ function getWords() {
         for (t of textArr) {
           newText += ('<span class="nefarious">' + t + ' ' + '</span>');
         }
-        console.log(newText);
+        // console.log(newText);
         container.innerHTML = newText;
 
     });

@@ -1,77 +1,31 @@
 // (function() {
 
-  var characters = {
-    ant: {
-      icon:  "http://moziru.com/images/shaow-clipart-ant-7.png",
-      dead: "https://adiospests.com/wp-content/uploads/sites/10/2016/04/deadbug.png",
-      type: "ant",
-      words: [
-        '', '! ', 'ew ', 'ant ', 'hill ', 'queen ', 'picnic ',
-        'insects ', 'crawling ', 'sm', 'o', 'sh '
-      ],
-      wordOffset: 4,
-      wordCutoff: 9,
-      angle: 0
-    },
-    bulbasaur: {
-      icon:  "http://78.media.tumblr.com/8f3d84d35802ef4681ff96f69fa187b1/tumblr_n6bu3cJbUA1raoul2o1_500.gif",
-      dead: "https://archive-media-1.nyafuu.org/vp/image/1401/17/1401170820123.png",
-      type: "bulba",
-      words: [
-        '', '! ', 'go ', 'ivy ', 'vine ', 'bulba ', 'plants ',
-        'ivysaur ', 'venusaur ', 'bulbasa', 'a', 'ur '
-      ],
-      wordOffset: 9,
-      wordCutoff: 9,
-      angle: 90,
-    },
-    charmander: {
-      icon:  "https://thumbs.gfycat.com/PhysicalFrayedArmyant-max-1mb.gif",
-      dead: "https://i.pinimg.com/originals/a2/b9/88/a2b988c7dd0bad762e5f19e994e35f3b.jpg",
-      type: "char",
-      words: [
-        '', '! ', 'go ', 'hot ', 'char ', 'ember ', 'mander ', 'inferno ',
-        'evolving ', 'chariza', 'a', 'rd '
-      ],
-      wordOffset: 9,
-      wordCutoff: 9,
-      angle: 90
-    },
-    finger: { // node
-      icon:  "https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png",
-      dead: "https://cdn.shopify.com/s/files/1/1061/1924/files/Middle_Finger_Emoji.png?9898922749706957214",
-      type: "ant",
-      words: [
-        '', '! ', 'ew ', 'die ', 'node ', 'sucks ', 'nodejs ', 'node.js ', 'theworst ', 'f', 'u', 'ck '
-      ],
-      wordOffset: 3,
-      wordCutoff: 9,
-      angle: 0
-    },
-    antGIF: {
-      icon: "http://www.illustrationweb.us/imagebase/media/102-101608.gif",
-      dead: "https://adiospests.com/wp-content/uploads/sites/10/2016/04/deadbug.png",
-      type: "ant",
-      words: [
-        '', '! ', 'ew ', 'ant ', 'hill ', 'queen ', 'picnic ',
-        'insects ', 'crawling ', 'sm', 'o', 'sh '
-      ],
-      wordOffset: 4,
-      wordCutoff: 9,
-      angle: 0
-    },
-  }
-
-  var character = characters.bulbasaur;
+  var character;
+  var wave = 0;
+  var options;
+  var active = 0;
 
   class Ant {
     // this is what's called when you use the "new" keyword
-    constructor($el, num, top, left) {
-      this.id = (("#" + character.type) + num);
-      this.node = $('<img id="' + (character.type + num) + '" class="character ' + character.type + '"></img>');
+    constructor($el, num, top, left, thisWave) {
+      // this.id = (("#" + character.type) + num);
+      console.log(thisWave);
+      this.id = `#${character.type}_${thisWave}_${num}`;
+      // this.id = `#${character.type}${num}`;
+
+      console.log(this.id);
+      // this.node = $('<img id="' + (character.type + num) + '" class="character ' + character.type + '"></img>');
+      // this.node = $(`<img id="${character.type}${num}" class="character ${character.type}"></img>`);
+
+      this.node = $(`
+        <img id="${character.type}_${thisWave}_${num}" style="width:${options.size}px;height:${options.size}px;" class="character ${character.type}"></img>
+      `);
+
       this.node.attr("src", character.icon);
       this.currentDirection = Math.floor(Math.random() * 8);
-      this.SPEED = 100;
+      this.SPEED = options.speed;
+      this.DIST = options.distance;
+      this.HALF = Math.floor(options.distance / 2);
       this.directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
       $el.append(this.node);
       this.node.css({ top: top, left: left });
@@ -83,11 +37,10 @@
     }
 
     killAnt(ant) {
-      console.log(ant.id);
-      console.log('asdasd');
       $(ant.id).click(function(event) {
-        console.log("hit");
+        console.log(`${ant.id} was killed!`);
         $(ant.id).attr("src", character.dead);
+        active --;
         ant.dead = true;
         $(ant.id).fadeOut(1000);
         //event.stopPropegation();
@@ -115,25 +68,25 @@
       let direction = this.directions[this.currentDirection];
 
       if (direction === "n") {
-        position.top -= 10;
+        position.top -= this.DIST;
       } else if (direction === "ne") {
-        position.top -= 5;
-        position.left += 5;
+        position.top -= this.HALF;
+        position.left += this.HALF;
       } else if (direction === "e") {
-        position.left += 10;
+        position.left += this.DIST;
       } else if (direction === "se") {
-        position.top += 5;
-        position.left += 5;
+        position.top += this.HALF;
+        position.left += this.HALF;
       } else if (direction === "s") {
-        position.top += 10;
+        position.top += this.DIST;
       } else if (direction === "sw") {
-        position.top += 5;
-        position.left -= 5;
+        position.top += this.HALF;
+        position.left -= this.HALF;
       } else if (direction === "w") {
-        position.left -= 10;
+        position.left -= this.DIST;
       } else if (direction === "nw") {
-        position.top -= 5;
-        position.left -= 5;
+        position.top -= this.HALF;
+        position.left -= this.HALF;
       }
 
       position.left =
@@ -157,50 +110,72 @@
       function(request, sender, sendResponse) {
         if( request.message === "update_char" ) {
           console.log('Changing char to ' + request.newChar);
+          characters = request.chars;
+          options = request.options;
           character = characters[request.newChar];
-          infect();
+          console.log(character);
+          console.log(options);
+          wave ++;
+          infect(wave);
         }
       }
     );
-
+    state.ready = true;
     chrome.runtime.sendMessage({"message": "ready_to_infect"});
   });
 
   function infect() {
+    var thisWave = wave;
     var wordsDeleted = 0;
     let ants = 0;
 
     var allWords = getWords();
     //console.log(allWords);
 
-    wordToAnt();
+    wordToAnt(thisWave);
 
-    function wordToAnt() {
-      let curr = allWords[wordsDeleted];
+    function wordToAnt(thisWave) {
+      if (thisWave < wave) return;
+      if (options.max && active >= options.max) {
+        return setTimeout(function() {
+          wordToAnt(thisWave);
+        }, options.frequency);
+      }
+      let curr = allWords[wordsDeleted % allWords.length];
+      if (options.random) {
+        console.log(Math.floor(Math.random() * allWords.length))
+        curr = allWords[Math.floor(Math.random() * allWords.length)]
+        console.log('curr' + curr);
+      }
       //console.log(curr);
       ants++;
+      active ++;
       let newPosition = {};
       newPosition.left = Math.floor($(curr).offset().left + (curr.offsetWidth / 2));
       newPosition.top = Math.floor($(curr).offset().top + (curr.offsetHeight / 2));
-
-      let newWord = pickWord(curr.innerText.length-1);
       let bg = curr.style.backgroundColor;
       curr.style.backgroundColor = 'LightBlue';
-      curr.innerText = newWord;
-      setTimeout(wordToAnt, 1000);
-      new Ant($("body"), ants, newPosition.top, newPosition.left);
-      if (wordsDeleted < allWords.length-1) {
+
+      if (options.replace && character.words.length) {
+        let newWord = pickWord(curr.innerText.length-1);
+        curr.innerText = newWord;
+      }
+      new Ant($("body"), ants, newPosition.top, newPosition.left, thisWave);
+      // if (wordsDeleted < allWords.length-1) {
         wordsDeleted ++;
+        setTimeout(function() {
+          wordToAnt(thisWave);
+        }, options.frequency);
         setTimeout(function() {
           curr.style.backgroundColor = bg;
         }, 500);
-      } else {
-        setInterval(function() {
-          ants++;
-          let newPosition = randCoords();
-          new Ant($("body"), ants, newPosition.top, newPosition.left);
-        }, 2000);
-      }
+      // } else {
+        // setInterval(function() {
+        //   ants++;
+        //   let newPosition = randCoords();
+        //   new Ant($("body"), ants, newPosition.top, newPosition.left);
+        // }, 2000);
+      // }
     }
 
     function pickWord(wordLength) {
