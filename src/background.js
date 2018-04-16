@@ -7,6 +7,8 @@ var clickedChar = "ant";
 var ready = false;
 
 var optionsInfo = {
+  type: 'options',
+  extractionKeys: ['frequency', 'speed', 'size', 'max', 'distance', 'random', 'replace'],
   localStorageKey: 'options',
   innerForm: 'innerOptions',
   otherToggle: 'addCharToggle',
@@ -14,6 +16,8 @@ var optionsInfo = {
 }
 
 var addCharInfo = {
+  type: 'chars',
+  extractionKeys: ['icon', 'dead', 'type', 'angle'],
   localStorageKey: 'chars',
   innerForm: 'innerAddChar',
   otherToggle: 'optionsToggle',
@@ -95,6 +99,18 @@ function toggle(info) {
 
   if (!localStorage.getItem(info.localStorageKey)) return;
 
+  if (info.type === 'options') {
+    let curr = JSON.parse(localStorage.getItem(info.type));
+    let currKeys = Object.keys(curr);
+    for (let key of currKeys) {
+      let elem = document.getElementById(`${key}Input`);
+      if (elem) {
+        elem.setAttribute('placeholder', curr[key].toString());
+        if (key === 'replace' || key === 'random') {elem.checked = curr[key];}
+      }
+    }
+  }
+
   let innerForm = document.getElementById(info.innerForm)
   innerForm.style.display = 'inline';
   document.getElementById(info.otherToggle).style.display = 'none';
@@ -103,15 +119,46 @@ function toggle(info) {
 
 
 function changeOptions() {
-
+  let extracted = extractFormData(optionsInfo);
+  localStorage.setItem('options', JSON.stringify(extracted));
+  toggle(optionsInfo);
 }
 
-function addChar () {
+function addChar() {
+  let extracted = extractFormData(addCharInfo);
+  console.log(extracted);
+  let currChars = JSON.parse(localStorage.getItem('chars'));
+  if (currChars[extracted.type]) return;
+  extracted.popup = extracted.icon;
+  extracted.words = [];
+  extracted.wordOffset = 0;
+  extracted.wordCutoff = 0;
+  currChars[extracted.type] = extracted;
+  localStorage.setItem('chars', JSON.stringify(currChars));
+  toggle(addCharInfo);
+  buildCharList();
+}
 
+function extractFormData(info) {
+  let extractedData = {};
+  for (let eKey of info.extractionKeys) {
+    let elem = document.getElementById(`${eKey}Input`);
+    if (elem) {
+      if (eKey === 'replace' || eKey === 'random') {extractedData[eKey] = elem.checked;}
+      else if (eKey === 'icon' || eKey === 'dead' || eKey === 'type') {extractedData[eKey] = elem.value || elem.getAttribute('placeholder');}
+      else {extractedData[eKey] = parseInt(elem.value || elem.getAttribute('placeholder'));};
+    }
+  }
+  return extractedData;
 }
 
 function buildCharList() {
   const charContainer = document.getElementById('characters');
+
+  while (charContainer.firstChild) {
+    charContainer.removeChild(charContainer.firstChild);
+}
+
   const chars = JSON.parse(localStorage.getItem('chars'));
   if (!chars) return;
   const charList = Object.keys(chars);
@@ -140,6 +187,9 @@ document.addEventListener('DOMContentLoaded', function () {
   injectController();
   document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo)});
   document.getElementById('addCharToggle').addEventListener('click', () => {toggle(addCharInfo)});
+
+  document.getElementById('submitOptions').addEventListener('click', changeOptions);
+  document.getElementById('submitAddChar').addEventListener('click', addChar);
 
 
   if (!localStorage.getItem('options')) retrieveOptions();
