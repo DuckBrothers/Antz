@@ -38,6 +38,7 @@
 
     killAnt(ant) {
       $(ant.id).click(function(event) {
+        if (ant.dead) return;
         console.log(`${ant.id} was killed!`);
         $(ant.id).attr("src", character.dead);
         active --;
