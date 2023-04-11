@@ -1,9 +1,3 @@
-
-if (qwerty) console.log('KKKKKKKKKKKKKKKKKKK');
-if (!qwerty) console.log('JJJJJJJJJJJJJJJJJJJ');
-
-var qwerty = 'please please print;'
-
 var allWords = getWords();
 function getWords() {
     var allP = $('p').toArray();

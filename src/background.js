@@ -37,42 +37,31 @@ async function injectController() {
     target : {tabId : await getTabId(), allFrames : true},
     files : [ "./src/controller.js" ],
   })
-  console.log("controller injected");
+  console.log("Controller injected!");
 }
 
 // injects all our scripts - only called the first time popup loads per page
 async function injectScripts() {
-  await chrome.scripting.executeScript({
-    target : {tabId : await getTabId(), allFrames : true},
-    files : [ "jquery-3.3.1.min.js" ],
+  let injection_target = { tabId : await getTabId(), allFrames : true };
+
+  let script_local_paths = [
+    'jquery-3.3.1.min.js',
+    './src/rotate.js',
+    './src/scrapewords.js',
+    './src/main.js'
+  ];
+  chrome.scripting.executeScript({
+    target : injection_target,
+    files : script_local_paths,
   })
-  console.log("jquery injected");
-  await chrome.scripting.executeScript({
-    target : {tabId : await getTabId(), allFrames : true},
-    files : [ "./src/rotate.js" ],
+  console.log("All scripts injected!");
+
+  let css_local_paths = ['./src/styles.css'];
+  chrome.scripting.insertCSS({
+    target : injection_target,
+    files : css_local_paths,
   })
-  console.log("rotate injected");
-  await chrome.scripting.executeScript({
-    target : {tabId : await getTabId(), allFrames : true},
-    files : [ "./src/scrapewords.js" ],
-  })
-  console.log("scrapewords injected");
-  await chrome.scripting.executeScript({
-    target : {tabId : await getTabId(), allFrames : true},
-    files : [ "./src/main.js" ],
-  })
-  console.log("main injected");
-  await chrome.scripting.insertCSS({
-    target : {tabId : await getTabId(), allFrames : true},
-    files : [ "./src/styles.css" ],
-  })
-  console.log("css injected");
-  await chrome.scripting.executeScript({
-    target : {tabId : await getTabId(), allFrames : true},
-    files : [ "./src/controller.js" ],
-  })
-  console.log("controller injected");
-  // window.close();
+  console.log("CSS injected!");
 }
 
 
