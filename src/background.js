@@ -24,25 +24,54 @@ var addCharInfo = {
   expanded: false,
 }
 
+async function getTabId() {
+  let queryOptions = { active: true, lastFocusedWindow: true };
+  // `tab` will either be a `tabs.Tab` instance or `undefined`.
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab.id;
+}
+
 // called when popup loads, sends out initial script to determine if our program has already been sent down
-function injectController() {
-  chrome.tabs.executeScript(null,
-    {file: "./src/controller.js"});
+async function injectController() {
+  await chrome.scripting.executeScript({
+    target : {tabId : await getTabId(), allFrames : true},
+    files : [ "./src/controller.js" ],
+  })
+  console.log("controller injected");
 }
 
 // injects all our scripts - only called the first time popup loads per page
-function injectScripts() {
-  chrome.tabs.executeScript(null,
-    {file: "jquery-3.3.1.min.js"});
-  chrome.tabs.executeScript(null,
-    {file: "./src/rotate.js"});
-    chrome.tabs.executeScript(null,
-      {file: "./src/scrapewords.js"});
-  chrome.tabs.executeScript(null,
-    {file: "./src/main.js"});
-  chrome.tabs.insertCSS(null, {
-     file : "./src/styles.css"
-    });
+async function injectScripts() {
+  await chrome.scripting.executeScript({
+    target : {tabId : await getTabId(), allFrames : true},
+    files : [ "jquery-3.3.1.min.js" ],
+  })
+  console.log("jquery injected");
+  await chrome.scripting.executeScript({
+    target : {tabId : await getTabId(), allFrames : true},
+    files : [ "./src/rotate.js" ],
+  })
+  console.log("rotate injected");
+  await chrome.scripting.executeScript({
+    target : {tabId : await getTabId(), allFrames : true},
+    files : [ "./src/scrapewords.js" ],
+  })
+  console.log("scrapewords injected");
+  await chrome.scripting.executeScript({
+    target : {tabId : await getTabId(), allFrames : true},
+    files : [ "./src/main.js" ],
+  })
+  console.log("main injected");
+  await chrome.scripting.insertCSS({
+    target : {tabId : await getTabId(), allFrames : true},
+    files : [ "./src/styles.css" ],
+  })
+  console.log("css injected");
+  await chrome.scripting.executeScript({
+    target : {tabId : await getTabId(), allFrames : true},
+    files : [ "./src/controller.js" ],
+  })
+  console.log("controller injected");
   // window.close();
 }
 
@@ -53,7 +82,7 @@ function chooseChar(e) {
   // choosing character does nothing if scripts aren't ready
   if (!ready || !localStorage.getItem('chars') || !localStorage.getItem('options')) return;
 
-  clickedChar = e.path[0].className;
+  clickedChar = e.target.className;
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     var activeTab = tabs[0];
     let req = {
@@ -206,7 +235,7 @@ function insertDelete(character, charDiv) {
 document.addEventListener('DOMContentLoaded', function () {
 
   // keeps us in sync with injected scripts
-  injectController();
+  injectController().then(() => console.log("injected controller scripts"));
   document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo)});
   document.getElementById('addCharToggle').addEventListener('click', () => {toggle(addCharInfo)});
 
@@ -230,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if( request.message === "ready_to_inject" ) {
-      injectScripts();
+      injectScripts().then(() => console.log("injected follow-up scripts"));
     }
   }
 );

@@ -15,7 +15,9 @@
     }
 
     // Bad eval to preven google closure to remove it from code o_O
-    eval('IE = "v"=="\v"');
+    // IE = "v"=="\v"
+    // //eval('IE = "v"=="\v"');
+    IE=false;
 
     jQuery.fn.extend({
         rotate:function(parameters)
