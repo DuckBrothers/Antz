@@ -1,224 +1,228 @@
-// (function() {
+var character;
+var wave = 0;
+var options;
 
-  var character;
-  var wave = 0;
-  var options;
-  var active = 0;
+const directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 
-  const directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
+const attachKillTrigger = (infection, agent) => {
+  $(agent.id).click(function(event) {
+    if (agent.dead) return; // already killed
+    // console.log(`${agent.id} was killed!`);
+    $(agent.id).attr("src", character.dead);
+    infection.active --;
+    agent.dead = true;
+    $(agent.id).fadeOut(1000);
+    // event.stopPropegation();
+  });
+}
 
-  class AgentMovement {
-    constructor() {
-      this.direction =  Math.floor(Math.random() * 8);
-    }
+const randCoords = () => {
+  let coords = {};
+  coords.top = Math.random() * ($(window).height() - 50);
+  coords.left = Math.random() * ($(window).width() - 50);
+  return coords;
+}
 
-    updateDirection() {
-      const turnPercentage = 15;
-      let directionRoll = Math.floor(Math.random() * 100);
+const matchReplacementWord = (character, wordLength) => {
+  if (wordLength < character.wordCutoff) {
+    return character.words[wordLength];
+  } else {
+    return character.words[9] +
+      character.words[10].repeat(wordLength-character.wordOffset) +
+      character.words[11];
+  }
+}
 
-      if (directionRoll < 15) {
-        this.direction = (this.direction + 7) % 8;
-      } else if (directionRoll < 30) {
-        this.direction = (this.direction + 1) % 8;
-      }
-    }
 
-    calculateOrientation(characterOrientation) {
-      return (540 + characterOrientation - this.direction * 45) % 360;
-    }
-
-    calculatePosition(position, dist, half, width, height) {
-      let direction = directions[this.direction];
-
-      switch (directions[this.direction]) {
-        case 'n':
-          position.top += dist;
-          break;
-        case 'ne':
-          position.top += half;
-          position.left += half;
-          break;
-        case 'e':
-          position.left += dist;
-          break;
-        case 'se':
-          position.top -= half;
-          position.left += half;
-          break;
-        case 's':
-          position.top -= dist;
-          break;
-        case 'sw':
-          position.top -= half;
-          position.left -= half;
-          break;
-        case 'w':
-          position.left -= dist;
-          break;
-        case 'nw':
-          position.top += half;
-          position.left -= half;
-          break;
-      }
-
-      position.left = (position.left + width - 50) % (width - 50);
-      position.top = (position.top + height - 50) % (height - 50);
-
-      return position;
-    }
-
+class Infection {
+  constructor(wave, words) {
+    this.wave = wave;
+    this.agents = 0;
+    this.active = 0;
+    this.words = words;
   }
 
-  class Ant {
-    // this is what's called when you use the "new" keyword
-    constructor($el, num, top, left, thisWave) {
-      // this.id = (("#" + character.type) + num);
-      console.log(thisWave);
-      this.id = `#${character.type}_${thisWave}_${num}`;
-      // this.id = `#${character.type}${num}`;
+  start() {
+    this.infect();
+  }
 
-      console.log(this.id);
-      // this.node = $('<img id="' + (character.type + num) + '" class="character ' + character.type + '"></img>');
-      // this.node = $(`<img id="${character.type}${num}" class="character ${character.type}"></img>`);
+  end() {}
 
-      this.node = $(`
-        <img id="${character.type}_${thisWave}_${num}" style="width:${options.size}px;height:${options.size}px;" class="character ${character.type}"></img>
-      `);
+  infect() {
+    if (this.wave < wave) return; // stop generating agents if new wave started
+    // skip generation if at max infection agents
+    if (options.max && this.active >= options.max) {
+      return setTimeout(() => this.infect(), options.frequency);
+    }
 
-      this.movement = new AgentMovement()
-      this.node.attr("src", character.icon);
-      this.SPEED = options.speed;
-      this.DIST = options.distance;
-      this.HALF = Math.floor(options.distance / 2);
-      $el.append(this.node);
-      this.node.css({ top: top, left: left });
-      this.dead = false;
-      this.killAnt(this);
-      $(this.id).rotate(this.movement.calculateOrientation(character.angle));
+    // let allWords = getWords();
+    let nextWord = this.words[this.agents % this.words.length];
+    if (options.random) {
+      nextWord = this.words[Math.floor(Math.random() * this.words.length)]
+    }
+    console.log(nextWord)
+    let newPosition = {};
+    newPosition.left = Math.floor($(nextWord).offset().left + (nextWord.offsetWidth / 2));
+    newPosition.top = Math.floor($(nextWord).offset().top + (nextWord.offsetHeight / 2));
+
+    // highlight word that's changing, but store original background for later
+    let bg = nextWord.style.backgroundColor;
+    nextWord.style.backgroundColor = 'LightBlue';
+
+    if (options.replace && character.words.length) {
+      let replacementWord = matchReplacementWord(character, nextWord.innerText.length-1);
+      console.log(`Replacing word "${nextWord}" with "${replacementWord}"`);
+      nextWord.innerText = replacementWord;
+    }
+
+    this.agents++;
+    this.active++;
+    new Ant($("body"), this, this.agents, newPosition.top, newPosition.left);
+    // if (wordsDeleted < allWords.length-1) {
+      setTimeout(() => this.infect(), options.frequency);
+      // return background color to normal
+      setTimeout(() => nextWord.style.backgroundColor = bg, 500);
+    // } else {
+      // setInterval(function() {
+      //   ants++;
+      //   let newPosition = randCoords();
+      //   new Ant($("body"), ants, newPosition.top, newPosition.left);
+      // }, 2000);
+    // }
+  }
+}
+
+class Ant {
+  // this is what's called when you use the "new" keyword
+  constructor($el, infection, num, top, left) {
+    const idTag = `${character.type}_${infection.wave}_${num}`
+    this.id = `#${idTag}`;
+    console.log(this.id);
+
+    this.SPEED = options.speed;
+    this.DIST = options.distance;
+    this.HALF = Math.floor(options.distance / 2);
+    this.dead = false;
+
+    // this.node = $('<img id="' + (character.type + num) + '" class="character ' + character.type + '"></img>');
+    // this.node = $(`<img id="${character.type}${num}" class="character ${character.type}"></img>`);
+    // initialize DOM element with appropriate id/class
+    this.node = $(`
+      <img id="${idTag}" style="width:${options.size}px;height:${options.size}px;" class="character ${character.type}"></img>
+    `);
+    this.node.attr("src", character.icon);
+    $el.append(this.node);
+    attachKillTrigger(infection, this);
+
+    // place agent in initialization position
+    this.movement = new AgentMovement()
+    this.node.css({ top: top, left: left });
+    $(this.id).rotate(this.movement.calculateOrientation(character.angle));
+
+    // start movement recursion
+    setTimeout(this.move.bind(this), this.SPEED);
+  }
+
+  move() {
+    this.movement.updateDirection();
+    let position = this.movement.calculatePosition(
+      this.node.offset(),
+      this.DIST,
+      this.HALF,
+      $(document).width(),
+      $(document).height());
+
+    this.node.offset(position);
+    $(this.id).rotate(this.movement.calculateOrientation(character.angle));
+
+    if (this.dead) {
+      console.log("you got one!");
+      this.dead = true;
+    } else {
       setTimeout(this.move.bind(this), this.SPEED);
     }
+  }
+}
 
-    killAnt(ant) {
-      $(ant.id).click(function(event) {
-        if (ant.dead) return;
-        console.log(`${ant.id} was killed!`);
-        $(ant.id).attr("src", character.dead);
-        active --;
-        ant.dead = true;
-        $(ant.id).fadeOut(1000);
-        //event.stopPropegation();
-      });
-    }
+class AgentMovement {
+  constructor() {
+    this.direction =  Math.floor(Math.random() * 8);
+  }
 
-    move() {
-      this.movement.updateDirection();
-      let position = this.movement.calculatePosition(
-        this.node.offset(),
-        this.DIST,
-        this.HALF,
-        $(document).width(),
-        $(document).height());
+  updateDirection() {
+    const turnPercentage = 15;
+    let directionRoll = Math.floor(Math.random() * 100);
 
-      this.node.offset(position);
-      $(this.id).rotate(this.movement.calculateOrientation(character.angle));
-
-      if (this.dead) {
-        console.log("you got one!");
-        this.dead = true;
-      } else {
-        setTimeout(this.move.bind(this), this.SPEED);
-      }
+    if (directionRoll < 15) {
+      this.direction = (this.direction + 7) % 8;
+    } else if (directionRoll < 30) {
+      this.direction = (this.direction + 1) % 8;
     }
   }
 
-  $(document).ready(function() {
-    chrome.runtime.onMessage.addListener(
-      function(request, sender, sendResponse) {
-        if( request.message === "update_char" ) {
-          console.log('Changing char to ' + request.newChar);
-          characters = request.chars;
-          options = request.options;
-          character = characters[request.newChar];
-          console.log(character);
-          console.log(options);
-          wave ++;
-          infect(wave);
-        }
-      }
-    );
-    state.ready = true;
-    chrome.runtime.sendMessage({"message": "ready_to_infect"});
-  });
-
-  function infect() {
-    var thisWave = wave;
-    var wordsDeleted = 0;
-    let ants = 0;
-
-    var allWords = getWords();
-    //console.log(allWords);
-
-    wordToAnt(thisWave);
-
-    function wordToAnt(thisWave) {
-      if (thisWave < wave) return;
-      if (options.max && active >= options.max) {
-        return setTimeout(function() {
-          wordToAnt(thisWave);
-        }, options.frequency);
-      }
-      let curr = allWords[wordsDeleted % allWords.length];
-      if (options.random) {
-        console.log(Math.floor(Math.random() * allWords.length))
-        curr = allWords[Math.floor(Math.random() * allWords.length)]
-        console.log('curr' + curr);
-      }
-      //console.log(curr);
-      ants++;
-      active ++;
-      let newPosition = {};
-      newPosition.left = Math.floor($(curr).offset().left + (curr.offsetWidth / 2));
-      newPosition.top = Math.floor($(curr).offset().top + (curr.offsetHeight / 2));
-      let bg = curr.style.backgroundColor;
-      curr.style.backgroundColor = 'LightBlue';
-
-      if (options.replace && character.words.length) {
-        let newWord = pickWord(curr.innerText.length-1);
-        curr.innerText = newWord;
-      }
-      new Ant($("body"), ants, newPosition.top, newPosition.left, thisWave);
-      // if (wordsDeleted < allWords.length-1) {
-        wordsDeleted ++;
-        setTimeout(function() {
-          wordToAnt(thisWave);
-        }, options.frequency);
-        setTimeout(function() {
-          curr.style.backgroundColor = bg;
-        }, 500);
-      // } else {
-        // setInterval(function() {
-        //   ants++;
-        //   let newPosition = randCoords();
-        //   new Ant($("body"), ants, newPosition.top, newPosition.left);
-        // }, 2000);
-      // }
-    }
-
-    function pickWord(wordLength) {
-      if (wordLength < character.wordCutoff) {
-        return character.words[wordLength];
-      } else {
-        return character.words[9] +
-          character.words[10].repeat(wordLength-character.wordOffset) +
-          character.words[11];
-      }
-    }
-
-    function randCoords() {
-      let coords = {};
-      coords.top = Math.random() * ($(window).height() - 50);
-      coords.left = Math.random() * ($(window).width() - 50);
-      return coords;
-    }
+  calculateOrientation(characterOrientation) {
+    return (540 + characterOrientation - this.direction * 45) % 360;
   }
-// })();
+
+  calculatePosition(position, dist, half, width, height) {
+    let direction = directions[this.direction];
+
+    switch (directions[this.direction]) {
+      case 'n':
+        position.top += dist;
+        break;
+      case 'ne':
+        position.top += half;
+        position.left += half;
+        break;
+      case 'e':
+        position.left += dist;
+        break;
+      case 'se':
+        position.top -= half;
+        position.left += half;
+        break;
+      case 's':
+        position.top -= dist;
+        break;
+      case 'sw':
+        position.top -= half;
+        position.left -= half;
+        break;
+      case 'w':
+        position.left -= dist;
+        break;
+      case 'nw':
+        position.top += half;
+        position.left -= half;
+        break;
+    }
+
+    position.left = (position.left + width - 50) % (width - 50);
+    position.top = (position.top + height - 50) % (height - 50);
+
+    return position;
+  }
+}
+
+
+$(document).ready(function() {
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      if( request.message === "update_char" ) {
+        console.log('Changing char to ' + request.newChar);
+        characters = request.chars;
+        options = request.options;
+        character = characters[request.newChar];
+        console.log(character);
+        console.log(options);
+        wave ++;
+        words = getWords();
+        infection = new Infection(wave, words);
+        infection.start();
+      }
+    }
+  );
+  state.ready = true;
+  chrome.runtime.sendMessage({"message": "ready_to_infect"});
+});
