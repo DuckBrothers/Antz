@@ -111,10 +111,6 @@ function chooseChar(e) {
 }
 
 function retrieveChars() {
-  console.log('XXXXXXXXXXXXXXXXX');
-  console.log(window.location.pathname);
-  console.log(window.location.href);
-
   fetch('./src/characters.json')
   .then(response => response.json())
   .then(res => {
