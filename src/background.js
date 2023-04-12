@@ -46,9 +46,10 @@ async function injectScripts() {
 
   let script_local_paths = [
     'jquery-3.3.1.min.js',
-    './src/rotate.js',
-    './src/scrapewords.js',
-    './src/main.js'
+    'src/rotate.js',
+    'src/scrapewords.js',
+    'src/infection_agent.js',
+    'src/main.js'
   ];
   chrome.scripting.executeScript({
     target : injection_target,
@@ -56,7 +57,7 @@ async function injectScripts() {
   })
   console.log("All scripts injected!");
 
-  let css_local_paths = ['./src/styles.css'];
+  let css_local_paths = ['src/styles.css'];
   chrome.scripting.insertCSS({
     target : injection_target,
     files : css_local_paths,
