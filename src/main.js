@@ -5,6 +5,70 @@
   var options;
   var active = 0;
 
+  const directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
+
+  class AgentMovement {
+    constructor() {
+      this.direction =  Math.floor(Math.random() * 8);
+    }
+
+    updateDirection() {
+      const turnPercentage = 15;
+      let directionRoll = Math.floor(Math.random() * 100);
+
+      if (directionRoll < 15) {
+        this.direction = (this.direction + 7) % 8;
+      } else if (directionRoll < 30) {
+        this.direction = (this.direction + 1) % 8;
+      }
+    }
+
+    calculateOrientation(characterOrientation) {
+      return (540 + characterOrientation - this.direction * 45) % 360;
+    }
+
+    calculatePosition(position, dist, half, width, height) {
+      let direction = directions[this.direction];
+
+      switch (directions[this.direction]) {
+        case 'n':
+          position.top += dist;
+          break;
+        case 'ne':
+          position.top += half;
+          position.left += half;
+          break;
+        case 'e':
+          position.left += dist;
+          break;
+        case 'se':
+          position.top -= half;
+          position.left += half;
+          break;
+        case 's':
+          position.top -= dist;
+          break;
+        case 'sw':
+          position.top -= half;
+          position.left -= half;
+          break;
+        case 'w':
+          position.left -= dist;
+          break;
+        case 'nw':
+          position.top += half;
+          position.left -= half;
+          break;
+      }
+
+      position.left = (position.left + width - 50) % (width - 50);
+      position.top = (position.top + height - 50) % (height - 50);
+
+      return position;
+    }
+
+  }
+
   class Ant {
     // this is what's called when you use the "new" keyword
     constructor($el, num, top, left, thisWave) {
@@ -21,18 +85,16 @@
         <img id="${character.type}_${thisWave}_${num}" style="width:${options.size}px;height:${options.size}px;" class="character ${character.type}"></img>
       `);
 
+      this.movement = new AgentMovement()
       this.node.attr("src", character.icon);
-      this.currentDirection = Math.floor(Math.random() * 8);
       this.SPEED = options.speed;
       this.DIST = options.distance;
       this.HALF = Math.floor(options.distance / 2);
-      this.directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
       $el.append(this.node);
       this.node.css({ top: top, left: left });
       this.dead = false;
       this.killAnt(this);
-      this.angle = (this.currentDirection * 45 + character.angle) % 360;
-      $(this.id).rotate(this.angle);
+      $(this.id).rotate(this.movement.calculateOrientation(character.angle));
       setTimeout(this.move.bind(this), this.SPEED);
     }
 
@@ -48,54 +110,17 @@
       });
     }
 
-
-
     move() {
-      let position = this.node.offset();
-      let dir = Math.floor(Math.random() * 100);
-
-      //$(this.id).rotate(this.angle);
-
-      if (dir < 15) {
-        this.currentDirection = (this.currentDirection + 7) % 8;
-        this.angle = (this.angle + 315) % 360;
-        $(this.id).rotate(this.angle);
-      } else if (dir < 30) {
-        this.currentDirection = (this.currentDirection + 9) % 8;
-        this.angle = (this.angle + 45) % 360;
-        $(this.id).rotate(this.angle);
-      }
-
-      let direction = this.directions[this.currentDirection];
-
-      if (direction === "n") {
-        position.top -= this.DIST;
-      } else if (direction === "ne") {
-        position.top -= this.HALF;
-        position.left += this.HALF;
-      } else if (direction === "e") {
-        position.left += this.DIST;
-      } else if (direction === "se") {
-        position.top += this.HALF;
-        position.left += this.HALF;
-      } else if (direction === "s") {
-        position.top += this.DIST;
-      } else if (direction === "sw") {
-        position.top += this.HALF;
-        position.left -= this.HALF;
-      } else if (direction === "w") {
-        position.left -= this.DIST;
-      } else if (direction === "nw") {
-        position.top -= this.HALF;
-        position.left -= this.HALF;
-      }
-
-      position.left =
-        (position.left + $(document).width() - 50) % ($(document).width() - 50);
-      position.top =
-        (position.top + $(document).height() - 50) % ($(document).height() - 50);
+      this.movement.updateDirection();
+      let position = this.movement.calculatePosition(
+        this.node.offset(),
+        this.DIST,
+        this.HALF,
+        $(document).width(),
+        $(document).height());
 
       this.node.offset(position);
+      $(this.id).rotate(this.movement.calculateOrientation(character.angle));
 
       if (this.dead) {
         console.log("you got one!");
