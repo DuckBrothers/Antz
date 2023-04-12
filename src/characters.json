@@ -13,22 +13,35 @@
     "angle": 0
   },
   "bulbasaur": {
-    "popup":  "http://78.media.tumblr.com/8f3d84d35802ef4681ff96f69fa187b1/tumblr_n6bu3cJbUA1raoul2o1_500.gif",
-    "icon":  "http://78.media.tumblr.com/8f3d84d35802ef4681ff96f69fa187b1/tumblr_n6bu3cJbUA1raoul2o1_500.gif",
-    "dead": "https://archive-media-1.nyafuu.org/vp/image/1401/17/1401170820123.png",
+    "popup":  "SWAP_ME/img/bulba.gif",
+    "icon":  "SWAP_ME/img/bulba.gif",
+    "dead": "SWAP_ME/img/bulba.gif",
     "type": "bulba",
     "words": [
-      "", "! ", "go ", "ivy ", "vine ", "bulba ", "plants ",
+      "", "! ", "go ", "ivy ", "vine ", "bulba ", "growth ",
       "ivysaur ", "venusaur ", "bulbasa", "a", "ur "
     ],
     "wordOffset": 9,
     "wordCutoff": 9,
     "angle": 90
   },
+  "squirtle": {
+    "popup":  "SWAP_ME/img/squirtle.gif",
+    "icon":  "SWAP_ME/img/squirtle.gif",
+    "dead": "SWAP_ME/img/squirtle.gif",
+    "type": "squirtle",
+    "words": [
+      "", "! ", "go ", "wet ", "blue ", "hydro ", "splash ",
+      "swimmer ", "squirtle ", "squ", "i", "rtle "
+    ],
+    "wordOffset": 9,
+    "wordCutoff": 9,
+    "angle": 90
+  },
   "charmander": {
-    "popup":  "https://thumbs.gfycat.com/PhysicalFrayedArmyant-max-1mb.gif",
-    "icon":  "https://thumbs.gfycat.com/PhysicalFrayedArmyant-max-1mb.gif",
-    "dead": "https://i.pinimg.com/originals/a2/b9/88/a2b988c7dd0bad762e5f19e994e35f3b.jpg",
+    "popup":  "SWAP_ME/img/char.gif",
+    "icon":  "SWAP_ME/img/char.gif",
+    "dead": "SWAP_ME/img/pokeball.gif",
     "type": "char",
     "words": [
       "", "! ", "go ", "hot ", "char ", "ember ", "mander ", "inferno ",

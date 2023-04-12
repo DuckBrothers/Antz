@@ -20,6 +20,16 @@
       "matches": ["http://*/*", "https://*/*"],
       "css" : ["./src/styles.css"]
     }
-],
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "img/*"
+      ],
+      "matches": [
+        "*://*/*"
+      ]
+    }
+  ],
   "manifest_version": 3
 }

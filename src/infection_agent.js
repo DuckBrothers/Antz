@@ -111,6 +111,7 @@ class InfectionAgent {
       <img id="${idTag}" style="width:${options.size}px;height:${options.size}px;" class="character ${character.type}"></img>
     `);
     this.node.attr("src", character.icon);
+    // this.node.css({'cursor': 'url(chrome-extension://nmbgndaiokpfjgphpaaoaejfljgkgkmp/img/pokeball.gif), default'});
     $el.append(this.node);
     attachKillTrigger(infection, this);
 

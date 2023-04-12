@@ -65,6 +65,31 @@ async function injectScripts() {
   console.log("CSS injected!");
 }
 
+const getExtensionExecutionLocation = () => {
+  console.log(window.location.href.toString());
+  console.log(window.location.pathname.toString());
+  return String(window.location.href).split(String(window.location.pathname))[0];
+}
+
+const retrieveCharacters = () => {
+  let characters = JSON.parse(localStorage.getItem('chars'));
+  let extensionExecutionLocation = getExtensionExecutionLocation();
+  console.log('ABCDEF');
+  console.log(extensionExecutionLocation);
+  Object.values(characters).forEach((character) => {
+    console.log(character.popup);
+    console.log(character.icon);
+    console.log(character.dead);
+    character.popup = String(character.popup).replace('SWAP_ME', extensionExecutionLocation);
+    character.icon = String(character.icon).replace('SWAP_ME', extensionExecutionLocation);
+    character.dead = String(character.dead).replace('SWAP_ME', extensionExecutionLocation);
+    console.log(character.popup);
+    console.log(character.icon);
+    console.log(character.dead);
+  });
+  return characters;
+}
+
 
 // tells main.js to change the character, restart infection
 function chooseChar(e) {
@@ -78,7 +103,7 @@ function chooseChar(e) {
     let req = {
       "message": "update_char",
       "newChar": clickedChar,
-      "chars": JSON.parse(localStorage.getItem('chars')),
+      "chars": retrieveCharacters(),
       "options": JSON.parse(localStorage.getItem('options'))
     }
     chrome.tabs.sendMessage(activeTab.id, req);
@@ -86,6 +111,10 @@ function chooseChar(e) {
 }
 
 function retrieveChars() {
+  console.log('XXXXXXXXXXXXXXXXX');
+  console.log(window.location.pathname);
+  console.log(window.location.href);
+
   fetch('./src/characters.json')
   .then(response => response.json())
   .then(res => {
@@ -182,9 +211,9 @@ function buildCharList() {
   const charContainer = document.getElementById('characters');
   while (charContainer.firstChild) {
     charContainer.removeChild(charContainer.firstChild);
-}
+  }
 
-  const chars = JSON.parse(localStorage.getItem('chars'));
+  const chars = retrieveCharacters();
   if (!chars) return;
   const charList = Object.keys(chars);
   for (let i = 0; i < charList.length; i ++) {
@@ -237,10 +266,16 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('deadInput').addEventListener(myEvent, () => {syncPreview('deadInput')});
   })
 
-  if (!localStorage.getItem('options')) retrieveOptions();
+  // if (!localStorage.getItem('options')) retrieveOptions();
+  // if (!localStorage.getItem('chars')) {
+  //   retrieveChars();
+  // } else {
+  //   buildCharList();
+  // }
 
-  if (!localStorage.getItem('chars')) {retrieveChars();}
-  else {buildCharList();};
+  // always load from source for now...
+  retrieveOptions();
+  retrieveChars();
 
 });
 
