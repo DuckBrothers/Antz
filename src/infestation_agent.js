@@ -4,11 +4,11 @@ var options;
 
 const directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 
-const attachKillTrigger = (infection, agent) => {
+const attachKillTrigger = (infestation, agent) => {
   $(agent.id).click(function(event) {
     if (agent.dead) return; // already killed
     agent.dead = true;
-    infection.active --;
+    infestation.active --;
     console.log(`You got ${agent.id}!`);
     $(agent.id).attr("src", character.dead);
     $(agent.id).rotate(0, false, false);
@@ -35,7 +35,7 @@ const matchReplacementWord = (character, wordLength) => {
 }
 
 
-class Infection {
+class Infestation {
   constructor(wave, words) {
     this.wave = wave;
     this.agents = 0;
@@ -44,16 +44,16 @@ class Infection {
   }
 
   start() {
-    this.infect();
+    this.infest();
   }
 
   end() {}
 
-  infect() {
+  infest() {
     if (this.wave < wave) return; // stop generating agents if new wave started
-    // skip generation if at max infection agents
+    // skip generation if at max infestation agents
     if (options.max && this.active >= options.max) {
-      return setTimeout(() => this.infect(), options.frequency);
+      return setTimeout(() => this.infest(), options.frequency);
     }
 
     // let allWords = getWords();
@@ -78,9 +78,9 @@ class Infection {
 
     this.agents++;
     this.active++;
-    new InfectionAgent($("body"), this, this.agents, newPosition.top, newPosition.left);
+    new InfestationAgent($("body"), this, this.agents, newPosition.top, newPosition.left);
     // if (wordsDeleted < allWords.length-1) {
-      setTimeout(() => this.infect(), options.frequency);
+      setTimeout(() => this.infest(), options.frequency);
       // return background color to normal
       setTimeout(() => nextWord.style.backgroundColor = bg, 500);
     // } else {
@@ -93,10 +93,10 @@ class Infection {
   }
 }
 
-class InfectionAgent {
+class InfestationAgent {
   // this is what's called when you use the "new" keyword
-  constructor($el, infection, num, top, left) {
-    const idTag = `${character.type}_${infection.wave}_${num}`
+  constructor($el, infestation, num, top, left) {
+    const idTag = `${character.type}_${infestation.wave}_${num}`
     this.id = `#${idTag}`;
     console.log(this.id);
 
@@ -114,7 +114,7 @@ class InfectionAgent {
     this.node.attr("src", character.icon);
     // this.node.css({'cursor': 'url(chrome-extension://nmbgndaiokpfjgphpaaoaejfljgkgkmp/img/pokeball.gif), default'});
     $el.append(this.node);
-    attachKillTrigger(infection, this);
+    attachKillTrigger(infestation, this);
 
     // place agent in initialization position
     this.movement = new AgentMovement()

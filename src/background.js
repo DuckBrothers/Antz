@@ -1,6 +1,6 @@
 // this background code defines the logic for the popup and injects our scripts
 
-// keeps track of which character we want to infect the page
+// keeps track of which character we want to infest the page
 var clickedChar = "ant";
 
 // keeps track of whether scripts have been injected
@@ -48,7 +48,7 @@ async function injectScripts() {
     'jquery-3.3.1.min.js',
     'src/transformations.js',
     'src/scrapewords.js',
-    'src/infection_agent.js',
+    'src/infestation_agent.js',
     'src/main.js'
   ];
   chrome.scripting.executeScript({
@@ -83,7 +83,7 @@ const retrieveCharacters = () => {
 }
 
 
-// tells main.js to change the character, restart infection
+// tells main.js to change the character, restart infestation
 function chooseChar(e) {
 
   // choosing character does nothing if scripts aren't ready
@@ -280,7 +280,7 @@ chrome.runtime.onMessage.addListener(
 // waits for  scripts to be ready, changes state variable here so that new characters can be injected
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    if( request.message === "ready_to_infect" ) {
+    if( request.message === "ready_to_infest" ) {
       ready = true;
     }
   }

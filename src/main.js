@@ -10,11 +10,11 @@ $(document).ready(function() {
         console.log(options);
         wave ++;
         words = getWords();
-        infection = new Infection(wave, words);
-        infection.start();
+        infestation = new Infestation(wave, words);
+        infestation.start();
       }
     }
   );
   state.ready = true;
-  chrome.runtime.sendMessage({"message": "ready_to_infect"});
+  chrome.runtime.sendMessage({"message": "ready_to_infest"});
 });
