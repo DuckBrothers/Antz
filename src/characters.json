@@ -2,7 +2,7 @@
   "ant": {
     "popup":  "SWAP_ME/img/ant.gif",
     "icon":  "SWAP_ME/img/ant.gif",
-    "dead": "SWAP_ME/img/split.png",
+    "dead": "SWAP_ME/img/splat.png",
     "type": "ant",
     "words": [
       "", "! ", "ew ", "ant ", "hill ", "queen ", "picnic ",
@@ -10,12 +10,14 @@
     ],
     "wordOffset": 4,
     "wordCutoff": 9,
+    "rotate": true,
+    "reflect": false,
     "angle": 0
   },
   "bulbasaur": {
     "popup":  "SWAP_ME/img/bulba.gif",
     "icon":  "SWAP_ME/img/bulba.gif",
-    "dead": "SWAP_ME/img/bulba.gif",
+    "dead": "SWAP_ME/img/pb-catch.jpg",
     "type": "bulba",
     "words": [
       "", "! ", "go ", "ivy ", "vine ", "bulba ", "growth ",
@@ -23,25 +25,29 @@
     ],
     "wordOffset": 9,
     "wordCutoff": 9,
+    "rotate": true,
+    "reflect": true,
     "angle": 90
   },
   "squirtle": {
     "popup":  "SWAP_ME/img/squirtle.gif",
     "icon":  "SWAP_ME/img/squirtle.gif",
-    "dead": "SWAP_ME/img/squirtle.gif",
+    "dead": "SWAP_ME/img/pb-catch.jpg",
     "type": "squirtle",
     "words": [
       "", "! ", "go ", "wet ", "blue ", "hydro ", "splash ",
       "swimmer ", "squirtle ", "squ", "i", "rtle "
     ],
-    "wordOffset": 9,
+    "wordOffset": 7,
     "wordCutoff": 9,
+    "rotate": true,
+    "reflect": true,
     "angle": 90
   },
   "charmander": {
     "popup":  "SWAP_ME/img/char.gif",
     "icon":  "SWAP_ME/img/char.gif",
-    "dead": "SWAP_ME/img/char.gif",
+    "dead": "SWAP_ME/img/pb-catch.jpg",
     "type": "char",
     "words": [
       "", "! ", "go ", "hot ", "char ", "ember ", "mander ", "inferno ",
@@ -49,6 +55,8 @@
     ],
     "wordOffset": 9,
     "wordCutoff": 9,
+    "rotate": true,
+    "reflect": true,
     "angle": 90
   },
   "ghost": {
@@ -58,10 +66,12 @@
     "type": "ghost",
     "words": [
       "", "! ", "ah ", "boo ", "dead ", "ghost ", "spooky ",
-      "haunted ", "crawling ", "bo", "o", "oo "
+      "haunted ", "floating ", "bo", "o", "oo "
     ],
     "wordOffset": 4,
     "wordCutoff": 8,
+    "rotate": false,
+    "reflect": false,
     "angle": 0
   }
 }

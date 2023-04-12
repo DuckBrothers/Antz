@@ -46,7 +46,7 @@ async function injectScripts() {
 
   let script_local_paths = [
     'jquery-3.3.1.min.js',
-    'src/rotate.js',
+    'src/transformations.js',
     'src/scrapewords.js',
     'src/infection_agent.js',
     'src/main.js'
@@ -66,8 +66,6 @@ async function injectScripts() {
 }
 
 const getExtensionExecutionLocation = () => {
-  console.log(window.location.href.toString());
-  console.log(window.location.pathname.toString());
   return String(window.location.href).split(String(window.location.pathname))[0];
 }
 
@@ -77,15 +75,9 @@ const retrieveCharacters = () => {
   console.log('ABCDEF');
   console.log(extensionExecutionLocation);
   Object.values(characters).forEach((character) => {
-    console.log(character.popup);
-    console.log(character.icon);
-    console.log(character.dead);
     character.popup = String(character.popup).replace('SWAP_ME', extensionExecutionLocation);
     character.icon = String(character.icon).replace('SWAP_ME', extensionExecutionLocation);
     character.dead = String(character.dead).replace('SWAP_ME', extensionExecutionLocation);
-    console.log(character.popup);
-    console.log(character.icon);
-    console.log(character.dead);
   });
   return characters;
 }

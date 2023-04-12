@@ -6,3 +6,9 @@
   cursor: pointer;
   z-index: 100;
 }
+
+/*
+img:hover {
+    cursor: url('chrome-extension://nmbgndaiokpfjgphpaaoaejfljgkgkmp/img/pokeball.gif'),auto;
+}
+*/

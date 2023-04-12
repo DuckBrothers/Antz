@@ -7,11 +7,12 @@ const directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 const attachKillTrigger = (infection, agent) => {
   $(agent.id).click(function(event) {
     if (agent.dead) return; // already killed
-    // console.log(`${agent.id} was killed!`);
-    $(agent.id).attr("src", character.dead);
-    infection.active --;
     agent.dead = true;
-    $(agent.id).fadeOut(1000);
+    infection.active --;
+    console.log(`You got ${agent.id}!`);
+    $(agent.id).attr("src", character.dead);
+    $(agent.id).rotate(0, false, false);
+    $(agent.id).fadeOut(2000);
     // event.stopPropegation();
   });
 }
@@ -118,13 +119,15 @@ class InfectionAgent {
     // place agent in initialization position
     this.movement = new AgentMovement()
     this.node.css({ top: top, left: left });
-    $(this.id).rotate(this.movement.calculateOrientation(character.angle));
+    $(this.id).rotate(this.movement.calculateOrientation(character), character.rotate, character.reflect);
 
     // start movement recursion
     setTimeout(this.move.bind(this), this.SPEED);
   }
 
   move() {
+    if (this.dead) return;
+
     this.movement.updateDirection();
     let position = this.movement.calculatePosition(
       this.node.offset(),
@@ -134,14 +137,9 @@ class InfectionAgent {
       $(document).height());
 
     this.node.offset(position);
-    $(this.id).rotate(this.movement.calculateOrientation(character.angle));
+    $(this.id).rotate(this.movement.calculateOrientation(character), character.rotate, character.reflect);
 
-    if (this.dead) {
-      console.log("you got one!");
-      this.dead = true;
-    } else {
-      setTimeout(this.move.bind(this), this.SPEED);
-    }
+    setTimeout(this.move.bind(this), this.SPEED);
   }
 }
 
@@ -161,8 +159,9 @@ class AgentMovement {
     }
   }
 
-  calculateOrientation(characterOrientation) {
-    return (540 + characterOrientation - this.direction * 45) % 360;
+  calculateOrientation(character) {
+    if (!character.rotate) return 0;
+    return (540 + character.angle - this.direction * 45) % 360;
   }
 
   calculatePosition(position, dist, half, width, height) {
