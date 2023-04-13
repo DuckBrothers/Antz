@@ -15,12 +15,6 @@
     "http://*/*",
     "https://*/*"
   ],
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "css" : ["./src/styles.css"]
-    }
-  ],
   "web_accessible_resources": [
     {
       "resources": [

@@ -56,13 +56,6 @@ async function injectScripts() {
     files : script_local_paths,
   })
   console.log("All scripts injected!");
-
-  let css_local_paths = ['src/styles.css'];
-  chrome.scripting.insertCSS({
-    target : injection_target,
-    files : css_local_paths,
-  })
-  console.log("CSS injected!");
 }
 
 const getExtensionExecutionLocation = () => {

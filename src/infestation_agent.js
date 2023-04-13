@@ -10,9 +10,11 @@ const attachKillTrigger = (infestation, agent) => {
     agent.dead = true;
     infestation.active --;
     console.log(`You got ${agent.id}!`);
-    $(agent.id).attr("src", character.dead);
+    $(agent.img_id).attr("src", character.dead);
     $(agent.id).rotate(0, false, false);
-    $(agent.id).fadeOut(2000);
+    $(agent.id).fadeOut(2000, function(){
+        $(agent.id).remove();
+    });
     // event.stopPropegation();
   });
 }
@@ -97,7 +99,10 @@ class InfestationAgent {
   // this is what's called when you use the "new" keyword
   constructor($el, infestation, num, top, left) {
     const idTag = `${character.type}_${infestation.wave}_${num}`
+    const idTagImg = `${idTag}_img`
+
     this.id = `#${idTag}`;
+    this.img_id = `#${idTagImg}`;
     console.log(this.id);
 
     this.SPEED = options.speed;
@@ -109,16 +114,23 @@ class InfestationAgent {
     // this.node = $(`<img id="${character.type}${num}" class="character ${character.type}"></img>`);
     // initialize DOM element with appropriate id/class
     this.node = $(`
-      <img id="${idTag}" style="width:${options.size}px;height:${options.size}px;" class="character ${character.type}"></img>
+      <div id="${idTag}" style="width:${options.killzone}px;height:${options.killzone}px;" class="character_node ${character.type}"></div>
     `);
-    this.node.attr("src", character.icon);
+    this.img =  $(`
+      <img id="${idTagImg}" style="width:${options.size}px;height:${options.size}px;" class="character_img ${character.type}"></img>
+    `);
+    this.img.attr("src", character.icon);
+    this.node.css({ position: 'absolute', 'border-radius': '50%', 'z-index': 99, 'background-color': 'transparent', display: 'flex', 'align-items': 'center', 'justify-content': 'center' });
+    this.img.css({ 'z-index': 100 });
+
     // this.node.css({'cursor': 'url(chrome-extension://nmbgndaiokpfjgphpaaoaejfljgkgkmp/img/pokeball.gif), default'});
     $el.append(this.node);
+    $(this.id).append(this.img);
     attachKillTrigger(infestation, this);
 
     // place agent in initialization position
     this.movement = new AgentMovement()
-    this.node.css({ top: top, left: left });
+    this.node.css({ top: top - (options.killzone / 2), left: left - (options.killzone / 2) });
     $(this.id).rotate(this.movement.calculateOrientation(character), character.rotate, character.reflect);
 
     // start movement recursion
@@ -138,6 +150,7 @@ class InfestationAgent {
 
     this.node.offset(position);
     $(this.id).rotate(this.movement.calculateOrientation(character), character.rotate, character.reflect);
+    // $(this.id).rotate(0, false, false);
 
     setTimeout(this.move.bind(this), this.SPEED);
   }
