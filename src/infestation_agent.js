@@ -120,7 +120,7 @@ class InfestationAgent {
       <img id="${idTagImg}" style="width:${options.size}px;height:${options.size}px;" class="character_img ${character.type}"></img>
     `);
     this.img.attr("src", character.icon);
-    this.node.css({ position: 'absolute', 'border-radius': '50%', 'z-index': 99, 'background-color': 'transparent', display: 'flex', 'align-items': 'center', 'justify-content': 'center' });
+    this.node.css({ position: 'absolute', 'border-radius': '50%', 'z-index': 99, 'background-color': 'transparent', display: 'flex', 'align-items': 'center', 'justify-content': 'center', 'cursor': character.cursor });
     this.img.css({ 'z-index': 100 });
 
     // this.node.css({'cursor': 'url(chrome-extension://nmbgndaiokpfjgphpaaoaejfljgkgkmp/img/pokeball.gif), default'});

@@ -3,6 +3,7 @@
     "popup":  "SWAP_ME/img/ant.gif",
     "icon":  "SWAP_ME/img/ant.gif",
     "dead": "SWAP_ME/img/splat.png",
+    "cursor": "grab",
     "type": "ant",
     "words": [
       "", "! ", "ew ", "ant ", "hill ", "queen ", "picnic ",
@@ -17,7 +18,8 @@
   "bulbasaur": {
     "popup":  "SWAP_ME/img/bulba.gif",
     "icon":  "SWAP_ME/img/bulba.gif",
-    "dead": "SWAP_ME/img/pb-catch.jpg",
+    "dead": "SWAP_ME/img/pb-catch.png",
+    "cursor": "url(SWAP_ME/img/pokeball.png), default",
     "type": "bulba",
     "words": [
       "", "! ", "go ", "ivy ", "vine ", "bulba ", "growth ",
@@ -32,7 +34,8 @@
   "squirtle": {
     "popup":  "SWAP_ME/img/squirtle.gif",
     "icon":  "SWAP_ME/img/squirtle.gif",
-    "dead": "SWAP_ME/img/pb-catch.jpg",
+    "dead": "SWAP_ME/img/pb-catch.png",
+    "cursor": "url(SWAP_ME/img/pokeball.png), default",
     "type": "squirtle",
     "words": [
       "", "! ", "go ", "wet ", "blue ", "hydro ", "splash ",
@@ -47,7 +50,8 @@
   "charmander": {
     "popup":  "SWAP_ME/img/char.gif",
     "icon":  "SWAP_ME/img/char.gif",
-    "dead": "SWAP_ME/img/pb-catch.jpg",
+    "dead": "SWAP_ME/img/pb-catch.png",
+    "cursor": "url(SWAP_ME/img/pokeball.png), default",
     "type": "char",
     "words": [
       "", "! ", "go ", "hot ", "char ", "ember ", "mander ", "inferno ",
@@ -63,6 +67,7 @@
     "popup":  "SWAP_ME/img/ghost.gif",
     "icon":  "SWAP_ME/img/ghost.gif",
     "dead": "SWAP_ME/img/boo.png",
+    "cursor": "zoom-in",
     "type": "ghost",
     "words": [
       "", "! ", "ah ", "boo ", "dead ", "ghost ", "spooky ",

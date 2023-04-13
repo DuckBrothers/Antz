@@ -71,6 +71,7 @@ const retrieveCharacters = () => {
     character.popup = String(character.popup).replace('SWAP_ME', extensionExecutionLocation);
     character.icon = String(character.icon).replace('SWAP_ME', extensionExecutionLocation);
     character.dead = String(character.dead).replace('SWAP_ME', extensionExecutionLocation);
+    character.cursor = String(character.cursor).replace('SWAP_ME', extensionExecutionLocation);
   });
   return characters;
 }
