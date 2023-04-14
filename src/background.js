@@ -56,9 +56,30 @@ class InfestationLifecycle {
     }
   }
 
-  infest(character) {
+  infest() {
+    // choosing character does nothing if scripts aren't ready
+    if (!lifecycle.state.ready || !localStorage.getItem('chars') || !localStorage.getItem('options')) return;
     this.state.character = character
     console.log('INFEST');
+  }
+
+  // tells main.js to change the character, restart infestation
+  infest(e) {
+    // choosing character does nothing if scripts aren't ready
+    if (!this.state.ready || !localStorage.getItem('chars') || !localStorage.getItem('options')) return;
+
+    this.state.infest = true;
+    this.state.character = e.target.className;
+    this.state.waves++;
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      let activeTab = tabs[0];
+      let req = {
+        "message": "infest",
+        "chars": retrieveCharacters(),
+        "options": JSON.parse(localStorage.getItem('options'))
+      };
+      chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
+    });
   }
 
   freeze() {
@@ -69,7 +90,7 @@ class InfestationLifecycle {
     this.state.infest = false;
     print(this.state)
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-      var activeTab = tabs[0];
+      let activeTab = tabs[0];
       let req = {
         "message": "update_state",
       };
@@ -135,34 +156,13 @@ const retrieveCharacters = () => {
   return characters;
 }
 
-
-// tells main.js to change the character, restart infestation
-function chooseChar(e, lifecycle) {
-
-  // choosing character does nothing if scripts aren't ready
-  if (!lifecycle.state.ready || !localStorage.getItem('chars') || !localStorage.getItem('options')) return;
-
-  lifecycle.state.infest = true;
-  lifecycle.state.character = e.target.className;
-  lifecycle.state.waves++;
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    var activeTab = tabs[0];
-    let req = {
-      "message": "infest",
-      "chars": retrieveCharacters(),
-      "options": JSON.parse(localStorage.getItem('options'))
-    };
-    chrome.tabs.sendMessage(activeTab.id, {...lifecycle.state, ...req});
-  });
-}
-
-function retrieveChars() {
+function retrieveChars(lifecycle) {
   fetch('./src/characters.json')
   .then(response => response.json())
   .then(res => {
     // chars = res;
     localStorage.setItem('chars', JSON.stringify(res));
-    buildCharList();
+    buildCharList(lifecycle);
     console.log('wrote to local chars');
   });
 }
@@ -220,7 +220,7 @@ function changeOptions() {
   toggle(optionsInfo);
 }
 
-function addChar() {
+function addChar(lifecycle) {
   let extracted = extractFormData(addCharInfo);
   console.log(extracted);
   let currChars = JSON.parse(localStorage.getItem('chars'));
@@ -231,7 +231,7 @@ function addChar() {
   currChars[extracted.type] = extracted;
   localStorage.setItem('chars', JSON.stringify(currChars));
   toggle(addCharInfo);
-  buildCharList();
+  buildCharList(lifecycle);
 }
 
 function extractFormData(info) {
@@ -248,13 +248,13 @@ function extractFormData(info) {
   return extractedData;
 }
 
-function buildCharList() {
+function buildCharList(lifecycle) {
   const charContainer = document.getElementById('characters');
   while (charContainer.firstChild) {
     charContainer.removeChild(charContainer.firstChild);
   }
 
-  const chars = retrieveCharacters();
+  const chars = retrieveCharacters(lifecycle);
   if (!chars) return;
   const charList = Object.keys(chars);
   for (let i = 0; i < charList.length; i ++) {
@@ -269,14 +269,14 @@ function buildCharList() {
     charImg.setAttribute('src', characterInfo.icon);
     charImg.style.height = 'auto';
     charImg.style.width = '55px';
-    insertDelete(character, charDiv);
+    insertDelete(character, charDiv, lifecycle);
     charDiv.appendChild(charImg);
-    charDiv.addEventListener('click', (e) => chooseChar(e, lifecycle));
+    charDiv.addEventListener('click', (e) => lifecycle.infest(e));
     charContainer.appendChild(charDiv);
   }
 }
 
-function insertDelete(character, charDiv) {
+function insertDelete(character, charDiv, lifecycle) {
   let del = document.createElement('input');
   del.type = 'button';
   del.value = 'X';
@@ -286,7 +286,7 @@ function insertDelete(character, charDiv) {
     delete currChars[character];
     localStorage.setItem('chars', JSON.stringify(currChars));
     ev.stopPropagation();
-    buildCharList();
+    buildCharList(lifecycle);
   })
   charDiv.appendChild(del);
 }
@@ -335,13 +335,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   // if (!localStorage.getItem('options')) retrieveOptions();
   // if (!localStorage.getItem('chars')) {
-  //   retrieveChars();
+  //   retrieveChars(lifecycle);
   // } else {
-  //   buildCharList();
+  //   buildCharList(lifecycle);
   // }
 
   // always load from source for now...
   retrieveOptions();
-  retrieveChars();
+  retrieveChars(lifecycle);
 
 });
