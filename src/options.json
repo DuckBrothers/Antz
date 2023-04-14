@@ -1,7 +1,7 @@
 {
   "frequency": 1000,
   "speed": 100,
-  "distance": 10,
+  "distance": 5,
   "random": false,
   "max": 20,
   "replace": true,

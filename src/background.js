@@ -1,12 +1,7 @@
 // this background code defines the logic for the popup and injects our scripts
 
-// keeps track of which character we want to infest the page
-var clickedChar = "ant";
-
-// keeps track of whether scripts have been injected
-var ready = false;
-
-var optionsInfo = {
+// object specs for generating UI for option config and adding new characters
+const optionsInfo = {
   type: 'options',
   extractionKeys: ['frequency', 'speed', 'size', 'max', 'distance', 'random', 'replace'],
   localStorageKey: 'options',
@@ -14,8 +9,7 @@ var optionsInfo = {
   otherToggle: 'addCharToggle',
   expanded: false,
 }
-
-var addCharInfo = {
+const addCharInfo = {
   type: 'chars',
   extractionKeys: ['icon', 'dead', 'type', 'angle'],
   localStorageKey: 'chars',
@@ -23,6 +17,72 @@ var addCharInfo = {
   otherToggle: 'optionsToggle',
   expanded: false,
 }
+
+class TabController {
+  constructor() {
+    this.displayed = '';
+    this.tablist = ['infest', 'configure'];
+  }
+
+  displayInfest() {
+    this.setTabContent('infest', 'configure');
+  }
+
+  displayConfigure() {
+    this.setTabContent('configure', 'infest');
+  }
+
+  setTabContent(display, hide) {
+    if (!this.tablist.includes(display) || !this.tablist.includes(hide)) return;
+    if (display == this.displayed) return;
+
+    this.displayed = display;
+    let tabToDisplay = document.getElementById(display);
+    let tabToHide = document.getElementById(hide);
+    tabToDisplay.style.display = 'inherit';
+    tabToHide.style.display = 'none';
+  }
+}
+
+class InfestationLifecycle {
+  constructor() {
+    this.state = {
+      options: null,
+      ready: false,
+      infest: false,
+      frozen: false,
+      waves: 0,
+      character: null,
+    }
+  }
+
+  infest(character) {
+    this.state.character = character
+    console.log('INFEST');
+  }
+
+  freeze() {
+    console.log('FREEZE');
+  }
+
+  clear() {
+    this.state.infest = false;
+    print(this.state)
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      var activeTab = tabs[0];
+      let req = {
+        "message": "update_state",
+      };
+      chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
+    });
+
+    // ALSO DO UI CHANGES
+  }
+}
+
+
+let tabController = new TabController();
+let lifecycle = new InfestationLifecycle();
 
 async function getTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
@@ -77,21 +137,22 @@ const retrieveCharacters = () => {
 
 
 // tells main.js to change the character, restart infestation
-function chooseChar(e) {
+function chooseChar(e, lifecycle) {
 
   // choosing character does nothing if scripts aren't ready
-  if (!ready || !localStorage.getItem('chars') || !localStorage.getItem('options')) return;
+  if (!lifecycle.state.ready || !localStorage.getItem('chars') || !localStorage.getItem('options')) return;
 
-  clickedChar = e.target.className;
+  lifecycle.state.infest = true;
+  lifecycle.state.character = e.target.className;
+  lifecycle.state.waves++;
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     var activeTab = tabs[0];
     let req = {
-      "message": "update_char",
-      "newChar": clickedChar,
+      "message": "infest",
       "chars": retrieveCharacters(),
       "options": JSON.parse(localStorage.getItem('options'))
-    }
-    chrome.tabs.sendMessage(activeTab.id, req);
+    };
+    chrome.tabs.sendMessage(activeTab.id, {...lifecycle.state, ...req});
   });
 }
 
@@ -210,7 +271,7 @@ function buildCharList() {
     charImg.style.width = '55px';
     insertDelete(character, charDiv);
     charDiv.appendChild(charImg);
-    charDiv.addEventListener('click', chooseChar);
+    charDiv.addEventListener('click', (e) => chooseChar(e, lifecycle));
     charContainer.appendChild(charDiv);
   }
 }
@@ -230,18 +291,35 @@ function insertDelete(character, charDiv) {
   charDiv.appendChild(del);
 }
 
+// listens for controller script to determine if scripts need to be injected
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if( request.message === "ready_to_inject" ) {
+      injectScripts().then(() => console.log("injected follow-up scripts"));
+    }
+  }
+);
+
+// waits for  scripts to be ready, changes state variable here so that new characters can be injected
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if( request.message === "ready_to_infest" ) {
+      lifecycle.state.ready = true;
+    }
+  }
+);
+
 // adds click listener to each character div
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
 
   // keeps us in sync with injected scripts
   injectController().then(() => console.log("injected controller scripts"));
 
-  let tabController = new TabController();
   tabController.displayInfest();
   document.getElementById('infest-tab').addEventListener('click', () => tabController.displayInfest());
   document.getElementById('configure-tab').addEventListener('click', () => tabController.displayConfigure());
 
-  document.getElementById('clear-button').addEventListener('click', () => console.log('CLEAR'));
+  document.getElementById('clear-button').addEventListener('click', () => lifecycle.clear());
   document.getElementById('freeze-button').addEventListener('click', () => console.log('FREEZE'));
 
   document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo)});
@@ -267,48 +345,3 @@ document.addEventListener('DOMContentLoaded', function () {
   retrieveChars();
 
 });
-
-
-// listens for controller script to determine if scripts need to be injected
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if( request.message === "ready_to_inject" ) {
-      injectScripts().then(() => console.log("injected follow-up scripts"));
-    }
-  }
-);
-
-// waits for  scripts to be ready, changes state variable here so that new characters can be injected
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if( request.message === "ready_to_infest" ) {
-      ready = true;
-    }
-  }
-);
-
-class TabController {
-  constructor() {
-    this.displayed = '';
-    this.tablist = ['infest', 'configure'];
-  }
-
-  displayInfest() {
-    this.setTabContent('infest', 'configure');
-  }
-
-  displayConfigure() {
-    this.setTabContent('configure', 'infest');
-  }
-
-  setTabContent(display, hide) {
-    if (!this.tablist.includes(display) || !this.tablist.includes(hide)) return;
-    if (display == this.displayed) return;
-
-    this.displayed = display;
-    let tabToDisplay = document.getElementById(display);
-    let tabToHide = document.getElementById(hide);
-    tabToDisplay.style.display = 'inherit';
-    tabToHide.style.display = 'none';
-  }
-}

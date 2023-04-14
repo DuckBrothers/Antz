@@ -1,22 +1,21 @@
-var character;
-var wave = 0;
-var options;
+const directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 
-let directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
+// const kill = (agent) => {
+//   if (agent.dead) return; // already killed
+//   agent.dead = true;
+//   infestation.active --;
+//   infestation.state.total --;
+//   console.log(`You got ${agent.id}!`);
+//   $(agent.img_id).attr("src", infestation.character.dead);
+//   $(agent.id).rotate(0, false, false);
+//   $(agent.id).fadeOut(2000, function(){
+//       $(agent.id).remove();
+//   });
+//   // event.stopPropegation();
+// }
 
-const attachKillTrigger = (infestation, agent) => {
-  $(agent.id).click(function(event) {
-    if (agent.dead) return; // already killed
-    agent.dead = true;
-    infestation.active --;
-    console.log(`You got ${agent.id}!`);
-    $(agent.img_id).attr("src", character.dead);
-    $(agent.id).rotate(0, false, false);
-    $(agent.id).fadeOut(2000, function(){
-        $(agent.id).remove();
-    });
-    // event.stopPropegation();
-  });
+const attachKillTrigger = (agent) => {
+  $(agent.id).click(() => agent.kill());
 }
 
 const randCoords = () => {
@@ -38,8 +37,11 @@ const matchReplacementWord = (character, wordLength) => {
 
 
 class Infestation {
-  constructor(wave, words) {
+  constructor(state, options, wave, words, character) {
+    this.state = state;
+    this.options = options;
     this.wave = wave;
+    this.character = character;
     this.agents = 0;
     this.active = 0;
     this.words = words;
@@ -51,16 +53,18 @@ class Infestation {
 
   end() {}
 
-  infest() {
-    if (this.wave < wave) return; // stop generating agents if new wave started
+  infest(wave) {
+    // stop generating agents if new wave started or existing waves cleared
+    if (!this.state.infest) return;
+    if (this.wave < wave) return;
     // skip generation if at max infestation agents
-    if (options.max && this.active >= options.max) {
-      return setTimeout(() => this.infest(), options.frequency);
+    if (this.options.max && this.active >= this.options.max) {
+      return setTimeout(() => this.infest(), this.options.frequency);
     }
 
     // let allWords = getWords();
     let nextWord = this.words[this.agents % this.words.length];
-    if (options.random) {
+    if (this.options.random) {
       nextWord = this.words[Math.floor(Math.random() * this.words.length)]
     }
     console.log(nextWord)
@@ -72,17 +76,18 @@ class Infestation {
     let bg = nextWord.style.backgroundColor;
     nextWord.style.backgroundColor = 'LightBlue';
 
-    if (options.replace && character.words.length) {
-      let replacementWord = matchReplacementWord(character, nextWord.innerText.length-1);
+    if (this.options.replace && this.character.words.length) {
+      let replacementWord = matchReplacementWord(this.character, nextWord.innerText.length-1);
       console.log(`Replacing word "${nextWord}" with "${replacementWord}"`);
       nextWord.innerText = replacementWord;
     }
 
     this.agents++;
     this.active++;
+    this.state.total++;
     new InfestationAgent($("body"), this, this.agents, newPosition.top, newPosition.left);
     // if (wordsDeleted < allWords.length-1) {
-      setTimeout(() => this.infest(), options.frequency);
+      setTimeout(() => this.infest(wave), this.options.frequency);
       // return background color to normal
       setTimeout(() => nextWord.style.backgroundColor = bg, 500);
     // } else {
@@ -98,40 +103,41 @@ class Infestation {
 class InfestationAgent {
   // this is what's called when you use the "new" keyword
   constructor($el, infestation, num, top, left) {
-    const idTag = `${character.type}_${infestation.wave}_${num}`
+    const idTag = `${infestation.character.type}_${infestation.wave}_${num}`
     const idTagImg = `${idTag}_img`
 
     this.id = `#${idTag}`;
     this.img_id = `#${idTagImg}`;
     console.log(this.id);
 
-    this.SPEED = options.speed;
-    this.DIST = options.distance;
-    this.HALF = Math.floor(options.distance / 2);
+    this.SPEED = infestation.options.speed;
+    this.DIST = infestation.options.distance;
+    this.HALF = Math.floor(infestation.options.distance / 2);
+    this.infestation = infestation;
     this.dead = false;
 
     // this.node = $('<img id="' + (character.type + num) + '" class="character ' + character.type + '"></img>');
     // this.node = $(`<img id="${character.type}${num}" class="character ${character.type}"></img>`);
     // initialize DOM element with appropriate id/class
     this.node = $(`
-      <div id="${idTag}" style="width:${options.killzone}px;height:${options.killzone}px;" class="character_node ${character.type}"></div>
+      <div id="${idTag}" style="width:${infestation.options.killzone}px;height:${infestation.options.killzone}px;" class="character_node ${infestation.character.type}"></div>
     `);
     this.img =  $(`
-      <img id="${idTagImg}" style="width:${options.size}px;height:${options.size}px;" class="character_img ${character.type}"></img>
+      <img id="${idTagImg}" style="width:${infestation.options.size}px;height:${infestation.options.size}px;" class="character_img ${infestation.character.type}"></img>
     `);
-    this.img.attr("src", character.icon);
-    this.node.css({ position: 'absolute', 'border-radius': '50%', 'z-index': 99, 'background-color': 'transparent', display: 'flex', 'align-items': 'center', 'justify-content': 'center', 'cursor': character.cursor });
+    this.img.attr("src", infestation.character.icon);
+    this.node.css({ position: 'absolute', 'border-radius': '50%', 'z-index': 99, 'background-color': 'transparent', display: 'flex', 'align-items': 'center', 'justify-content': 'center', 'cursor': infestation.character.cursor });
     this.img.css({ 'z-index': 100 });
 
     // this.node.css({'cursor': 'url(chrome-extension://nmbgndaiokpfjgphpaaoaejfljgkgkmp/img/pokeball.gif), default'});
     $el.append(this.node);
     $(this.id).append(this.img);
-    attachKillTrigger(infestation, this);
+    attachKillTrigger(this);
 
     // place agent in initialization position
     this.movement = new AgentMovement()
-    this.node.css({ top: top - (options.killzone / 2), left: left - (options.killzone / 2) });
-    $(this.id).rotate(this.movement.calculateOrientation(character), character.rotate, character.reflect);
+    this.node.css({ top: top - (infestation.options.killzone / 2), left: left - (infestation.options.killzone / 2) });
+    $(this.id).rotate(this.movement.calculateOrientation(infestation.character), infestation.character.rotate, infestation.character.reflect);
 
     // start movement recursion
     setTimeout(this.move.bind(this), this.SPEED);
@@ -139,6 +145,7 @@ class InfestationAgent {
 
   move() {
     if (this.dead) return;
+    if (!this.infestation.state.infest) this.kill();
 
     this.movement.updateDirection();
     let position = this.movement.calculatePosition(
@@ -149,10 +156,23 @@ class InfestationAgent {
       $(document).height());
 
     this.node.offset(position);
-    $(this.id).rotate(this.movement.calculateOrientation(character), character.rotate, character.reflect);
+    $(this.id).rotate(this.movement.calculateOrientation(this.infestation.character), this.infestation.character.rotate, this.infestation.character.reflect);
     // $(this.id).rotate(0, false, false);
 
     setTimeout(this.move.bind(this), this.SPEED);
+  }
+
+  kill() {
+    if (this.dead) return; // already killed
+    this.dead = true;
+    this.infestation.active --;
+    this.infestation.state.total --;
+    console.log(`You got ${this.id}!`);
+    $(this.img_id).attr("src", this.infestation.character.dead);
+    $(this.id).rotate(0, false, false);
+    $(this.id).fadeOut(2000, function(){
+        $(this.id).remove();
+    });
   }
 }
 

@@ -7,5 +7,6 @@ if (typeof(state) !== 'undefined') {
   chrome.runtime.sendMessage({"message": "ready_to_inject"});
   var state = {
     'ready': false,
+    total: 0,
   };
 }
