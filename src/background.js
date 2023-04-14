@@ -68,7 +68,6 @@ const retrieveCharacters = () => {
   console.log('ABCDEF');
   console.log(extensionExecutionLocation);
   Object.values(characters).forEach((character) => {
-    character.popup = String(character.popup).replace('SWAP_ME', extensionExecutionLocation);
     character.icon = String(character.icon).replace('SWAP_ME', extensionExecutionLocation);
     character.dead = String(character.dead).replace('SWAP_ME', extensionExecutionLocation);
     character.cursor = String(character.cursor).replace('SWAP_ME', extensionExecutionLocation);
@@ -165,7 +164,6 @@ function addChar() {
   console.log(extracted);
   let currChars = JSON.parse(localStorage.getItem('chars'));
   if (currChars[extracted.type]) return;
-  extracted.popup = extracted.icon;
   extracted.words = [];
   extracted.wordOffset = 0;
   extracted.wordCutoff = 0;
@@ -207,7 +205,7 @@ function buildCharList() {
     let charImg = document.createElement('img');
     charImg.setAttribute('class', 'character');
     charImg.setAttribute('class', character);
-    charImg.setAttribute('src', characterInfo.popup);
+    charImg.setAttribute('src', characterInfo.icon);
     charImg.style.height = 'auto';
     charImg.style.width = '55px';
     insertDelete(character, charDiv);
@@ -237,6 +235,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // keeps us in sync with injected scripts
   injectController().then(() => console.log("injected controller scripts"));
+  let tabController = new TabController();
+  tabController.displayInfest();
+  document.getElementById('infest-tab').addEventListener('click', () => tabController.displayInfest());
+  document.getElementById('configure-tab').addEventListener('click', () => tabController.displayConfigure());
+
   document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo)});
   document.getElementById('addCharToggle').addEventListener('click', () => {toggle(addCharInfo)});
 
@@ -279,3 +282,29 @@ chrome.runtime.onMessage.addListener(
     }
   }
 );
+
+class TabController {
+  constructor() {
+    this.displayed = '';
+    this.tablist = ['infest', 'configure'];
+  }
+
+  displayInfest() {
+    this.setTabContent('infest', 'configure');
+  }
+
+  displayConfigure() {
+    this.setTabContent('configure', 'infest');
+  }
+
+  setTabContent(display, hide) {
+    if (!this.tablist.includes(display) || !this.tablist.includes(hide)) return;
+    if (display == this.displayed) return;
+
+    this.displayed = display;
+    let tabToDisplay = document.getElementById(display);
+    let tabToHide = document.getElementById(hide);
+    tabToDisplay.style.display = 'inherit';
+    tabToHide.style.display = 'none';
+  }
+}

@@ -2,7 +2,7 @@ var character;
 var wave = 0;
 var options;
 
-const directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
+let directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 
 const attachKillTrigger = (infestation, agent) => {
   $(agent.id).click(function(event) {

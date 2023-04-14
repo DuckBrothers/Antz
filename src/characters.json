@@ -1,6 +1,5 @@
 {
   "ant": {
-    "popup":  "SWAP_ME/img/ant.gif",
     "icon":  "SWAP_ME/img/ant.gif",
     "dead": "SWAP_ME/img/splat.png",
     "cursor": "grab",
@@ -16,7 +15,6 @@
     "angle": 0
   },
   "bulbasaur": {
-    "popup":  "SWAP_ME/img/bulba.gif",
     "icon":  "SWAP_ME/img/bulba.gif",
     "dead": "SWAP_ME/img/pb-catch.png",
     "cursor": "url(SWAP_ME/img/pokeball.png), default",
@@ -32,7 +30,6 @@
     "angle": 90
   },
   "squirtle": {
-    "popup":  "SWAP_ME/img/squirtle.gif",
     "icon":  "SWAP_ME/img/squirtle.gif",
     "dead": "SWAP_ME/img/pb-catch.png",
     "cursor": "url(SWAP_ME/img/pokeball.png), default",
@@ -48,7 +45,6 @@
     "angle": 90
   },
   "charmander": {
-    "popup":  "SWAP_ME/img/char.gif",
     "icon":  "SWAP_ME/img/char.gif",
     "dead": "SWAP_ME/img/pb-catch.png",
     "cursor": "url(SWAP_ME/img/pokeball.png), default",
@@ -64,7 +60,6 @@
     "angle": 90
   },
   "ghost": {
-    "popup":  "SWAP_ME/img/ghost.gif",
     "icon":  "SWAP_ME/img/ghost.gif",
     "dead": "SWAP_ME/img/boo.png",
     "cursor": "zoom-in",

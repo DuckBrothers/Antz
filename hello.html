@@ -11,22 +11,121 @@
       padding: 0px;
       background: white;
     }
+    #frame {
+      width: 180px;
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      background: black;
+      /* border-radius: 2%; */
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+    #content {
+      width: 90%;
+      margin: 0px;
+      padding: 0px;
+      background: RED;
+    }
+    #tabs-container {
+      /* width: 100%; */
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      background: PURPLE;
+      display: flex;
+      height: 20px;
+      /* justify-content: center; */
+      /* align-items: center;
+      flex-direction: row; */
+      /* flex-wrap: wrap; */
+    }
+    .infest-configure-tab {
+      width: 50%;
+      /* height: 100% */
+      margin: 0px;
+      padding: 5px;
+      border: 0px;
+      background: RED;
+      align-items: center;
+      flex-direction: row;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+    #infest-tab {
+      background: BLUE;
+    }
+    #configure-tab {
+      background: ORANGE;
+    }
+    #infest {
+      background: BLUE;
+      display: none;
+    }
+    #configure {
+      background: ORANGE;
+      display: none;
+    }
+    #characters {
+      background: GREEN;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: baseline;
+      align-items: baseline;
+      max-height: 600px;
+      overflow-y: scroll;
+    }
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    .character {
+      height: auto;
+      width: 50px;
+    }
+    /* #frame {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      background: black;
+      border-radius: 2%;
+    } */
+    #title {
+      color: WHITE;
+      background: GREY;
+      width: 100%;
+      /* height: 20px; */
+      margin: 0px;
+      padding: 0px;
+      padding-top: 5px;
+    }
+    #instructions {
+      color: WHITE;
+      background: GREY;
+      width: 100%;
+      /* height: 20px; */
+      margin: 0px;
+      padding: 0px;
+      padding-bottom: 5px;
+    }
     div:first-child {
       margin-top: 0px;
     }
     div {
       cursor: pointer;
       text-align: center;
-      padding: 1px 3px;
+      /* padding: 1px 3px; */
       font-family: sans-serif;
       font-size: 0.8em;
-      width: 120px;
+      /* width: 120px; */
       margin: auto;
-      margin-top: 1px;
-    }
-    .character {
-      height: auto;
-      width: 50px;
+      /* margin-top: 1px; */
     }
     .preview {
       height: auto;
@@ -61,45 +160,66 @@
     <script src="./src/background.js"></script>
   </head>
   <body>
-    <div id="characters">
-    </div>
-    <div id="options" class="formWrapper">
-      <div id="optionsToggle" class="toggle"><h3>Options</h3></div>
-      <div id="innerOptions" class="innerForm">
-        <p>Icon Size (px)</p>
-        <input type="number" id="sizeInput" placeholder='20' max='100' min='5'>
-        <p>Move Speed (ms)</p>
-        <input type="number" id="speedInput" placeholder='100' max='500' min='50'>
-        <p>Move Dist (px)</p>
-        <input type="number" id="distanceInput" placeholder='10' max='40' min='4'>
-        <p>Spawn Frequency (ms)</p>
-        <input type="number" id="frequencyInput" placeholder='1000' max='100000' min='200'>
-        <p>Max (on screen)</p>
-        <input type="number" id="maxInput" placeholder='20' max='500' min='1'>
-        <p>Random Spawn</p>
-        <input type="checkbox" class= "check" id="randomInput">
-        <p>Replace Words</p>
-        <input type="checkbox" class="check" id="replaceInput">
-        <br><br>
-        <input type='button' id='submitOptions' class='submit' value='save'>
+    <div id="frame">
+      <div id="title">
+        <h1>INFESTATION</h1>
       </div>
-    </div>
-    <div id="addChar" class="formWrapper">
-      <div id="addCharToggle" class="toggle"><h3>Add Character</h3></div>
-      <div id="innerAddChar" class="innerForm">
-        <p>Image URL</p>
-        <input type="url" id="iconInput" placeholder='http://www.pngmart.com/files/4/Happy-PNG-HD.png'>
-        <img class='preview' src='http://www.pngmart.com/files/4/Happy-PNG-HD.png' id='iconInputPreview' ></img>
-        <p>Squish URL</p>
-        <input type="url" id="deadInput" placeholder='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg'>
-        <img class='preview' src='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg' id='deadInputPreview' ></img>
-        <p>Character</p>
-        <input type="text" placeholder='e.g. ant' id="typeInput">
-        <p>Angle (clockwise from up)</p>
-        <input type="number" placeholder='0' max='359' min='0' id="angleInput">
-        <br><br><br>
-        <input type='button' id='submitAddChar' class='submit' value='save'>
+      <div id="content">
+        <div id="tabs-container">
+          <div id="infest-tab" class="infest-configure-tab">infest</div>
+          <div id="configure-tab" class="infest-configure-tab">configure</div>
+        </div>
+        <div id="infest" class="sub-content">
+          <div id="characters">
+          </div>
+          <div id="clear-button-container">
+            <div id="clear-button">
+              CLEAR INFESTATION
+            </div>
+          </div>
+        </div>
+        <div id="configure" class="sub-content">
+          <div id="options" class="formWrapper">
+            <div id="optionsToggle" class="toggle"><h3>behavior options</h3></div>
+            <div id="innerOptions" class="innerForm">
+              <p>Icon Size (px)</p>
+              <input type="number" id="sizeInput" placeholder='20' max='100' min='5'>
+              <p>Move Speed (ms)</p>
+              <input type="number" id="speedInput" placeholder='100' max='500' min='50'>
+              <p>Move Dist (px)</p>
+              <input type="number" id="distanceInput" placeholder='10' max='40' min='4'>
+              <p>Spawn Frequency (ms)</p>
+              <input type="number" id="frequencyInput" placeholder='1000' max='100000' min='200'>
+              <p>Max (on screen)</p>
+              <input type="number" id="maxInput" placeholder='20' max='500' min='1'>
+              <p>Random Spawn</p>
+              <input type="checkbox" class= "check" id="randomInput">
+              <p>Replace Words</p>
+              <input type="checkbox" class="check" id="replaceInput">
+              <br><br>
+              <input type='button' id='submitOptions' class='submit' value='save'>
+            </div>
+          </div>
+          <div id="addChar" class="formWrapper">
+            <div id="addCharToggle" class="toggle"><h3>add character</h3></div>
+            <div id="innerAddChar" class="innerForm">
+              <p>Image URL</p>
+              <input type="url" id="iconInput" placeholder='http://www.pngmart.com/files/4/Happy-PNG-HD.png'>
+              <img class='preview' src='http://www.pngmart.com/files/4/Happy-PNG-HD.png' id='iconInputPreview' ></img>
+              <p>Squish URL</p>
+              <input type="url" id="deadInput" placeholder='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg'>
+              <img class='preview' src='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg' id='deadInputPreview' ></img>
+              <p>Character</p>
+              <input type="text" placeholder='e.g. ant' id="typeInput">
+              <p>Angle (clockwise from up)</p>
+              <input type="number" placeholder='0' max='359' min='0' id="angleInput">
+              <br><br><br>
+              <input type='button' id='submitAddChar' class='submit' value='save'>
+            </div>
+          </div>
+        </div>
       </div>
+      <div id="instructions"><p>Choose a Character to start an infection!</p></div>
     </div>
   </body>
 </html>
