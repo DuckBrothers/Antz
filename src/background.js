@@ -235,10 +235,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // keeps us in sync with injected scripts
   injectController().then(() => console.log("injected controller scripts"));
+
   let tabController = new TabController();
   tabController.displayInfest();
   document.getElementById('infest-tab').addEventListener('click', () => tabController.displayInfest());
   document.getElementById('configure-tab').addEventListener('click', () => tabController.displayConfigure());
+
+  document.getElementById('clear-button').addEventListener('click', () => console.log('CLEAR'));
+  document.getElementById('freeze-button').addEventListener('click', () => console.log('FREEZE'));
 
   document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo)});
   document.getElementById('addCharToggle').addEventListener('click', () => {toggle(addCharInfo)});
