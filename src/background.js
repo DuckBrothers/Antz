@@ -50,7 +50,7 @@ class InfestationLifecycle {
       options: null,
       ready: false,
       infest: false,
-      frozen: false,
+      freeze: false,
       waves: 0,
       character: null,
     }
@@ -69,6 +69,7 @@ class InfestationLifecycle {
     if (!this.state.ready || !localStorage.getItem('chars') || !localStorage.getItem('options')) return;
 
     this.state.infest = true;
+    this.state.freeze = false;
     this.state.character = e.target.className;
     this.state.waves++;
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
@@ -83,12 +84,7 @@ class InfestationLifecycle {
   }
 
   freeze() {
-    console.log('FREEZE');
-  }
-
-  clear() {
-    this.state.infest = false;
-    print(this.state)
+    this.state.freeze = !this.state.freeze;
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
       let activeTab = tabs[0];
       let req = {
@@ -97,7 +93,18 @@ class InfestationLifecycle {
       chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
     });
 
-    // ALSO DO UI CHANGES
+    // TODO: UPDATE UI
+  }
+
+  clear() {
+    this.state.infest = false;
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      let activeTab = tabs[0];
+      let req = {
+        "message": "update_state",
+      };
+      chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
+    });
   }
 }
 
@@ -320,7 +327,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   document.getElementById('configure-tab').addEventListener('click', () => tabController.displayConfigure());
 
   document.getElementById('clear-button').addEventListener('click', () => lifecycle.clear());
-  document.getElementById('freeze-button').addEventListener('click', () => console.log('FREEZE'));
+  document.getElementById('freeze-button').addEventListener('click', () => lifecycle.freeze());
 
   document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo)});
   document.getElementById('addCharToggle').addEventListener('click', () => {toggle(addCharInfo)});

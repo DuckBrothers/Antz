@@ -57,8 +57,9 @@ class Infestation {
     // stop generating agents if new wave started or existing waves cleared
     if (!this.state.infest) return;
     if (this.wave < wave) return;
-    // skip generation if at max infestation agents
-    if (this.options.max && this.active >= this.options.max) {
+
+    // skip generation if at max infestation agents or if frozen
+    if (this.active >= this.options.max || this.state.freeze) {
       return setTimeout(() => this.infest(), this.options.frequency);
     }
 
@@ -146,6 +147,7 @@ class InfestationAgent {
   move() {
     if (this.dead) return;
     if (!this.infestation.state.infest) this.kill();
+    if (this.infestation.state.freeze) return setTimeout(this.move.bind(this), this.SPEED);
 
     this.movement.updateDirection();
     let position = this.movement.calculatePosition(
