@@ -1,18 +1,18 @@
 {
-  "ant": {
-    "icon":  "SWAP_ME/img/ant.gif",
-    "dead": "SWAP_ME/img/splat.png",
-    "cursor": "grab",
-    "type": "ant",
+  "pikachu": {
+    "icon":  "SWAP_ME/img/pikachu.gif",
+    "dead": "SWAP_ME/img/pb-catch.png",
+    "cursor": "url(SWAP_ME/img/pokeball.png), default",
+    "type": "pikachu",
     "words": [
-      "", "! ", "ew ", "ant ", "hill ", "queen ", "picnic ",
-      "insects ", "crawling ", "sm", "o", "sh "
+      "", "! ", "go ", "zap ", "jolt ", "pichu ", "raichu ",
+      "pikachu ", "electric ", "pikach", "u", "u "
     ],
-    "wordOffset": 4,
+    "wordOffset": 7,
     "wordCutoff": 9,
     "rotate": true,
-    "reflect": false,
-    "angle": 0
+    "reflect": true,
+    "angle": 270
   },
   "bulbasaur": {
     "icon":  "SWAP_ME/img/bulba.gif",
@@ -58,6 +58,21 @@
     "rotate": true,
     "reflect": true,
     "angle": 90
+  },
+  "ant": {
+    "icon":  "SWAP_ME/img/ant.gif",
+    "dead": "SWAP_ME/img/splat.png",
+    "cursor": "grab",
+    "type": "ant",
+    "words": [
+      "", "! ", "ew ", "ant ", "hill ", "queen ", "picnic ",
+      "insects ", "crawling ", "sm", "o", "sh "
+    ],
+    "wordOffset": 4,
+    "wordCutoff": 9,
+    "rotate": true,
+    "reflect": false,
+    "angle": 0
   },
   "ghost": {
     "icon":  "SWAP_ME/img/ghost.gif",
