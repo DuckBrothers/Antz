@@ -1,27 +1,13 @@
 const directions = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 
-// const kill = (agent) => {
-//   if (agent.dead) return; // already killed
-//   agent.dead = true;
-//   infestation.active --;
-//   infestation.state.total --;
-//   console.log(`You got ${agent.id}!`);
-//   $(agent.img_id).attr("src", infestation.character.dead);
-//   $(agent.id).rotate(0, false, false);
-//   $(agent.id).fadeOut(2000, function(){
-//       $(agent.id).remove();
-//   });
-//   // event.stopPropegation();
-// }
-
 const attachKillTrigger = (agent) => {
   $(agent.id).click(() => agent.kill());
 }
 
 const randCoords = () => {
   let coords = {};
-  coords.top = Math.random() * ($(window).height() - 50);
-  coords.left = Math.random() * ($(window).width() - 50);
+  coords.top = Math.random() * ($(window).height());
+  coords.left = Math.random() * ($(window).width());
   return coords;
 }
 
@@ -37,14 +23,13 @@ const matchReplacementWord = (character, wordLength) => {
 
 
 class Infestation {
-  constructor(state, options, wave, words, character) {
+  constructor(state, options, wave, character) {
     this.state = state;
     this.options = options;
     this.wave = wave;
     this.character = character;
     this.agents = 0;
     this.active = 0;
-    this.words = words;
   }
 
   infest() {
@@ -53,15 +38,27 @@ class Infestation {
     if (this.wave < this.state.waves) return;
 
     // skip generation if at max infestation agents or if frozen
-    if (this.active >= this.options.max || this.state.freeze) {
+    if ((this.active >= this.options.wave) || (this.state.total >= this.options.max) || this.state.freeze) {
       return setTimeout(() => this.infest(), this.options.frequency);
     }
 
-    // let allWords = getWords();
-    let nextWord = this.words[this.agents % this.words.length];
-    if (this.options.random) {
-      nextWord = this.words[Math.floor(Math.random() * this.words.length)]
-    }
+    let spawnCenter = this.prepareAgentSpawnPosition();
+
+    this.agents++;
+    this.active++;
+    this.state.total++;
+    this.state.spawned++;
+    new InfestationAgent($("body"), this, this.agents, spawnCenter);
+    setTimeout(() => this.infest(), this.options.frequency);
+  }
+
+  prepareAgentSpawnPosition() {
+    if (!this.options.words) return randCoords();
+
+    let words = this.state.words;
+    if (this.options.random) words = this.state.shuffledWords;
+
+    let nextWord = words[this.state.spawned % words.length];
     let spawnCenter = $(nextWord).offset();
     spawnCenter.left += Math.floor(nextWord.offsetWidth / 2);
     spawnCenter.top += Math.floor(nextWord.offsetHeight / 2);
@@ -70,27 +67,16 @@ class Infestation {
     let bg = nextWord.style.backgroundColor;
     nextWord.style.backgroundColor = 'LightBlue';
 
-    if (this.options.replace && this.character.words.length) {
+    if (this.options.hide) {
+      nextWord.style.opacity = 0;
+    } else if (this.options.replace && this.character.words.length) {
       let replacementWord = matchReplacementWord(this.character, nextWord.innerText.length-1);
       console.log(`Replacing word "${nextWord}" with "${replacementWord}"`);
       nextWord.innerText = replacementWord;
     }
 
-    this.agents++;
-    this.active++;
-    this.state.total++;
-    new InfestationAgent($("body"), this, this.agents, spawnCenter);
-    // if (wordsDeleted < allWords.length-1) {
-      setTimeout(() => this.infest(), this.options.frequency);
-      // return background color to normal
-      setTimeout(() => nextWord.style.backgroundColor = bg, 500);
-    // } else {
-      // setInterval(function() {
-      //   ants++;
-      //   let newPosition = randCoords();
-      //   new Ant($("body"), ants, newPosition.top, newPosition.left);
-      // }, 2000);
-    // }
+    setTimeout(() => nextWord.style.backgroundColor = bg, 500);
+    return spawnCenter;
   }
 }
 

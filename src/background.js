@@ -3,7 +3,7 @@
 // object specs for generating UI for option config and adding new characters
 const optionsInfo = {
   type: 'options',
-  extractionKeys: ['frequency', 'speed', 'size', 'killzone', 'wave', 'max', 'distance', 'random', 'replace'],
+  extractionKeys: ['frequency', 'speed', 'size', 'killzone', 'wave', 'max', 'distance', 'words', 'hide', 'random', 'replace', 'snap'],
   localStorageKey: 'options',
   innerForm: 'innerOptions',
   otherToggle: 'addCharToggle',
@@ -253,8 +253,9 @@ function toggle(info) {
 }
 
 
-function changeOptions() {
+function changeOptions(lifecycle) {
   let extracted = extractFormData(optionsInfo);
+  lifecycle.state.options = extracted;
   localStorage.setItem('options', JSON.stringify(extracted));
   toggle(optionsInfo);
 }
@@ -396,7 +397,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo)});
   document.getElementById('addCharToggle').addEventListener('click', () => {toggle(addCharInfo)});
 
-  document.getElementById('submitOptions').addEventListener('click', changeOptions);
+  document.getElementById('submitOptions').addEventListener('click', () => changeOptions(lifecycle));
   document.getElementById('submitAddChar').addEventListener('click', () => addChar(lifecycle, ui));
 
   ['change', 'paste', 'keyup', 'keydown', 'mouseup'].forEach((myEvent) => {

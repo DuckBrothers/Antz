@@ -6,7 +6,8 @@ $(document).ready(function() {
         char = request.chars[request.character];
         console.log(`Changing character to: ${JSON.stringify(char)}`);
         console.log(`Updating options to: ${JSON.stringify(request.options)}`);
-        infestation = new Infestation(state, request.options, request.waves, getWords(), char);
+        if (request.options.words) getWords(state);
+        infestation = new Infestation(state, request.options, request.waves, char);
         infestation.infest();
         return;
       }

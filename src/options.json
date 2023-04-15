@@ -1,10 +1,16 @@
 {
   "frequency": 1000,
   "speed": 100,
-  "distance": 5,
+  "distance": 10,
   "random": false,
-  "max": 20,
+  "max": 40,
+  "wave": 20,
   "replace": true,
   "size": 20,
-  "killzone": 40
+  "killzone": 40,
+  "words": true,
+  "random": false,
+  "hide": false,
+  "replace": true,
+  "snap": false
 }

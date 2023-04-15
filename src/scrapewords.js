@@ -1,5 +1,6 @@
-var allWords = getWords();
-function getWords() {
+//var allWords = getWords();
+function getWords(state) {
+    if (state.words) return;
     var allP = $('p').toArray();
     var allH = $(':header').toArray();
 
@@ -40,5 +41,7 @@ function getWords() {
           }
       }
 
-    return allS;
+    state.words = allS;
+    state.shuffledWords = [...allS];
+    shuffleArray(state.shuffledWords);
 }
