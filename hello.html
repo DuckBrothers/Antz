@@ -220,18 +220,24 @@
             <div id="innerOptions" class="innerForm">
               <p>Icon Size (px)</p>
               <input type="number" id="sizeInput" placeholder='20' max='100' min='5'>
+              <p>Icon Clickzone (px)</p>
+              <input type="number" id="killzoneInput" placeholder='40' max='120' min='5'>
               <p>Move Speed (ms)</p>
               <input type="number" id="speedInput" placeholder='100' max='500' min='50'>
               <p>Move Dist (px)</p>
-              <input type="number" id="distanceInput" placeholder='10' max='40' min='4'>
+              <input type="number" id="distanceInput" placeholder='10' max='50' min='5'>
               <p>Spawn Frequency (ms)</p>
               <input type="number" id="frequencyInput" placeholder='1000' max='100000' min='200'>
+              <p>Max (per wave)</p>
+              <input type="number" id="waveInput" placeholder='20' max='100' min='1'>
               <p>Max (on screen)</p>
-              <input type="number" id="maxInput" placeholder='20' max='500' min='1'>
+              <input type="number" id="maxInput" placeholder='20' max='100' min='1'>
               <p>Random Spawn</p>
               <input type="checkbox" class= "check" id="randomInput">
               <p>Replace Words</p>
               <input type="checkbox" class="check" id="replaceInput">
+              <p>Snap to Screen</p>
+              <input type="checkbox" class="check" id="snapInput">
               <br><br>
               <input type='button' id='submitOptions' class='submit' value='save'>
             </div>

@@ -3,7 +3,7 @@
 // object specs for generating UI for option config and adding new characters
 const optionsInfo = {
   type: 'options',
-  extractionKeys: ['frequency', 'speed', 'size', 'max', 'distance', 'random', 'replace'],
+  extractionKeys: ['frequency', 'speed', 'size', 'killzone', 'wave', 'max', 'distance', 'random', 'replace'],
   localStorageKey: 'options',
   innerForm: 'innerOptions',
   otherToggle: 'addCharToggle',
@@ -203,7 +203,7 @@ function toggle(info) {
       let elem = document.getElementById(`${key}Input`);
       if (elem) {
         elem.setAttribute('placeholder', curr[key].toString());
-        if (key === 'replace' || key === 'random') {elem.checked = curr[key];}
+        if (key === 'replace' || key === 'random' || key === 'snap') {elem.checked = curr[key];}
       }
     }
   }
@@ -240,7 +240,7 @@ function extractFormData(info) {
   for (let eKey of info.extractionKeys) {
     let elem = document.getElementById(`${eKey}Input`);
     if (elem) {
-      if (eKey === 'replace' || eKey === 'random') {extractedData[eKey] = elem.checked;}
+      if (eKey === 'replace' || eKey === 'random' || eKey === 'snap') {extractedData[eKey] = elem.checked;}
       else if (eKey === 'icon' || eKey === 'dead') {extractedData[eKey] = elem.value || elem.getAttribute('placeholder');}
       else if (eKey === 'type') {extractedData[eKey] = (elem.value || elem.getAttribute('placeholder')).replace(/\W/g, '');}
       else {extractedData[eKey] = parseInt(elem.value || elem.getAttribute('placeholder'));};
