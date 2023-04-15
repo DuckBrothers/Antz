@@ -47,16 +47,10 @@ class Infestation {
     this.words = words;
   }
 
-  start() {
-    this.infest();
-  }
-
-  end() {}
-
-  infest(wave) {
+  infest() {
     // stop generating agents if new wave started or existing waves cleared
     if (!this.state.infest) return;
-    if (this.wave < wave) return;
+    if (this.wave < this.state.waves) return;
 
     // skip generation if at max infestation agents or if frozen
     if (this.active >= this.options.max || this.state.freeze) {
@@ -68,10 +62,9 @@ class Infestation {
     if (this.options.random) {
       nextWord = this.words[Math.floor(Math.random() * this.words.length)]
     }
-    console.log(nextWord)
-    let newPosition = {};
-    newPosition.left = Math.floor($(nextWord).offset().left + (nextWord.offsetWidth / 2));
-    newPosition.top = Math.floor($(nextWord).offset().top + (nextWord.offsetHeight / 2));
+    let spawnCenter = $(nextWord).offset();
+    spawnCenter.left += Math.floor(nextWord.offsetWidth / 2);
+    spawnCenter.top += Math.floor(nextWord.offsetHeight / 2);
 
     // highlight word that's changing, but store original background for later
     let bg = nextWord.style.backgroundColor;
@@ -86,9 +79,9 @@ class Infestation {
     this.agents++;
     this.active++;
     this.state.total++;
-    new InfestationAgent($("body"), this, this.agents, newPosition.top, newPosition.left);
+    new InfestationAgent($("body"), this, this.agents, spawnCenter);
     // if (wordsDeleted < allWords.length-1) {
-      setTimeout(() => this.infest(wave), this.options.frequency);
+      setTimeout(() => this.infest(), this.options.frequency);
       // return background color to normal
       setTimeout(() => nextWord.style.backgroundColor = bg, 500);
     // } else {
@@ -103,17 +96,13 @@ class Infestation {
 
 class InfestationAgent {
   // this is what's called when you use the "new" keyword
-  constructor($el, infestation, num, top, left) {
+  constructor($el, infestation, num, center) {
     const idTag = `${infestation.character.type}_${infestation.wave}_${num}`
     const idTagImg = `${idTag}_img`
 
     this.id = `#${idTag}`;
     this.img_id = `#${idTagImg}`;
-    console.log(this.id);
 
-    this.SPEED = infestation.options.speed;
-    this.DIST = infestation.options.distance;
-    this.HALF = Math.floor(infestation.options.distance / 2);
     this.infestation = infestation;
     this.dead = false;
 
@@ -137,31 +126,29 @@ class InfestationAgent {
 
     // place agent in initialization position
     this.movement = new AgentMovement()
-    this.node.css({ top: top - (infestation.options.killzone / 2), left: left - (infestation.options.killzone / 2) });
+    this.node.css(this.movement.calculateOriginalPosition(center, this.infestation.options, $(document).width(), $(document).height()));
     $(this.id).rotate(this.movement.calculateOrientation(infestation.character), infestation.character.rotate, infestation.character.reflect);
 
     // start movement recursion
-    setTimeout(this.move.bind(this), this.SPEED);
+    setTimeout(this.move.bind(this), this.infestation.options.speed);
   }
 
   move() {
     if (this.dead) return;
     if (!this.infestation.state.infest) this.kill();
-    if (this.infestation.state.freeze) return setTimeout(this.move.bind(this), this.SPEED);
+    if (this.infestation.state.freeze) return setTimeout(this.move.bind(this), this.infestation.options.speed);
 
     this.movement.updateDirection();
     let position = this.movement.calculatePosition(
       this.node.offset(),
-      this.DIST,
-      this.HALF,
+      infestation.options,
       $(document).width(),
       $(document).height());
 
     this.node.offset(position);
     $(this.id).rotate(this.movement.calculateOrientation(this.infestation.character), this.infestation.character.rotate, this.infestation.character.reflect);
-    // $(this.id).rotate(0, false, false);
 
-    setTimeout(this.move.bind(this), this.SPEED);
+    setTimeout(this.move.bind(this), this.infestation.options.speed);
   }
 
   kill() {
@@ -199,8 +186,24 @@ class AgentMovement {
     return (540 + character.angle - this.direction * 45) % 360;
   }
 
-  calculatePosition(position, dist, half, width, height) {
+  enforceLowerRightBuffer(position, options, width, height) {
+    let lowerRightBuffer = Math.floor(Math.max(options.size, options.killzone) * 1.5);
+    position.left = (position.left + width - lowerRightBuffer) % (width - lowerRightBuffer);
+    position.top = (position.top + height - lowerRightBuffer) % (height - lowerRightBuffer);
+    return position;
+  }
+
+  calculateOriginalPosition(center, options, width, height) {
+    let position = {}
+    position.top = center.top - (options.killzone / 2);
+    position.left = center.left - (options.killzone / 2);
+    return this.enforceLowerRightBuffer(position, options, width, height);
+  }
+
+  calculatePosition(position, options, width, height) {
     let direction = directions[this.direction];
+    let dist = options.distance;
+    let half = options.distance / 2;
 
     switch (directions[this.direction]) {
       case 'n':
@@ -233,9 +236,6 @@ class AgentMovement {
         break;
     }
 
-    position.left = (position.left + width - 50) % (width - 50);
-    position.top = (position.top + height - 50) % (height - 50);
-
-    return position;
+    return this.enforceLowerRightBuffer(position, options, width, height);
   }
 }

@@ -56,13 +56,6 @@ class InfestationLifecycle {
     }
   }
 
-  infest() {
-    // choosing character does nothing if scripts aren't ready
-    if (!lifecycle.state.ready || !localStorage.getItem('chars') || !localStorage.getItem('options')) return;
-    this.state.character = character
-    console.log('INFEST');
-  }
-
   // tells main.js to change the character, restart infestation
   infest(e) {
     // choosing character does nothing if scripts aren't ready
@@ -81,6 +74,7 @@ class InfestationLifecycle {
       };
       chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
     });
+    // TODO: UPDATE UI - ENABLE FREEZE and CLEAR
   }
 
   freeze() {
@@ -92,8 +86,7 @@ class InfestationLifecycle {
       };
       chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
     });
-
-    // TODO: UPDATE UI
+    // TODO: UPDATE UI - FREEZE vs UNFREEZE, and DISABLED when NO INFEST
   }
 
   clear() {
@@ -106,6 +99,7 @@ class InfestationLifecycle {
       chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
     });
   }
+  // TODO: UPDATE UI - DISABLED when NO INFEST
 }
 
 
