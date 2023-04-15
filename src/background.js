@@ -11,7 +11,7 @@ const optionsInfo = {
 }
 const addCharInfo = {
   type: 'chars',
-  extractionKeys: ['icon', 'dead', 'type', 'angle'],
+  extractionKeys: ['icon', 'dead', 'cursor', 'type', 'angle', 'rotate', 'reflect'],
   localStorageKey: 'chars',
   innerForm: 'innerAddChar',
   otherToggle: 'optionsToggle',
@@ -232,7 +232,7 @@ function toggle(info) {
       let elem = document.getElementById(`${key}Input`);
       if (elem) {
         elem.setAttribute('placeholder', curr[key].toString());
-        if (key === 'replace' || key === 'random' || key === 'snap') {elem.checked = curr[key];}
+        if (key === 'replace' || key === 'random' || key === 'snap' || key === 'rotate' || key === 'reflect') {elem.checked = curr[key];}
       }
     }
   }
@@ -251,17 +251,23 @@ function changeOptions() {
 }
 
 function addChar(lifecycle, ui) {
-  let extracted = extractFormData(addCharInfo);
-  console.log(extracted);
+  let extracted = processCustomCharacter(extractFormData(addCharInfo));
+  console.log(`Received new Character specs: ${JSON.stringify(extracted)}`);
   let currChars = JSON.parse(localStorage.getItem('chars'));
-  if (currChars[extracted.type]) return;
-  extracted.words = [];
-  extracted.wordOffset = 0;
-  extracted.wordCutoff = 0;
   currChars[extracted.type] = extracted;
   localStorage.setItem('chars', JSON.stringify(currChars));
   toggle(addCharInfo);
   buildCharList(lifecycle, ui);
+}
+
+function processCustomCharacter(specs) {
+  let r = (Math.random() + 1).toString(36).substring(7); // random digits
+  specs.type = `${specs.type}_${r}`;
+  specs.words = ['', 'x ', 'xx ', 'x', 'x', 'x '];
+  specs.wordOffset = 2;
+  specs.wordCutoff = 2;
+  specs.cursor = `url(${specs.cursor}), default`;
+  return specs;
 }
 
 function extractFormData(info) {
@@ -269,7 +275,7 @@ function extractFormData(info) {
   for (let eKey of info.extractionKeys) {
     let elem = document.getElementById(`${eKey}Input`);
     if (elem) {
-      if (eKey === 'replace' || eKey === 'random' || eKey === 'snap') {extractedData[eKey] = elem.checked;}
+      if (eKey === 'replace' || eKey === 'random' || eKey === 'snap' || eKey === 'rotate' || eKey === 'reflect') {extractedData[eKey] = elem.checked;}
       else if (eKey === 'icon' || eKey === 'dead') {extractedData[eKey] = elem.value || elem.getAttribute('placeholder');}
       else if (eKey === 'type') {extractedData[eKey] = (elem.value || elem.getAttribute('placeholder')).replace(/\W/g, '');}
       else {extractedData[eKey] = parseInt(elem.value || elem.getAttribute('placeholder'));};
@@ -384,6 +390,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   ['change', 'paste', 'keyup', 'keydown', 'mouseup'].forEach((myEvent) => {
       document.getElementById('iconInput').addEventListener(myEvent, () => {syncPreview('iconInput')});
       document.getElementById('deadInput').addEventListener(myEvent, () => {syncPreview('deadInput')});
+      document.getElementById('cursorInput').addEventListener(myEvent, () => {syncPreview('cursorInput')});
   })
 
   // if (!localStorage.getItem('options')) retrieveOptions();

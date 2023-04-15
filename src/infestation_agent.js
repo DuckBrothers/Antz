@@ -29,9 +29,9 @@ const matchReplacementWord = (character, wordLength) => {
   if (wordLength < character.wordCutoff) {
     return character.words[wordLength];
   } else {
-    return character.words[9] +
-      character.words[10].repeat(wordLength-character.wordOffset) +
-      character.words[11];
+    return character.words[character.wordCutoff] +
+      character.words[character.wordCutoff+1].repeat(wordLength-character.wordOffset) +
+      character.words[character.wordCutoff+2];
   }
 }
 
