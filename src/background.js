@@ -278,18 +278,41 @@ function buildCharList(lifecycle) {
 }
 
 function insertDelete(character, charDiv, lifecycle) {
-  let del = document.createElement('input');
-  del.type = 'button';
-  del.value = 'X';
-  del.setAttribute('class', 'delButton');
-  del.addEventListener('click', (ev) => {
+  let del = document.createElement('div');
+  del.id = 'deleteMenu';
+
+  let removeChar = document.createElement('input');
+  removeChar.value = 'remove'
+  let cancelChar = document.createElement('input');
+  cancelChar.value = 'cancel';
+
+  [removeChar, cancelChar].forEach((button) => {
+    button.type = 'button';
+    button.setAttribute('class', 'delButton');
+  });
+
+  charDiv.addEventListener("contextmenu",function(event){
+      console.log("Say hello!");
+      event.preventDefault();
+      del.style.display = "flex";
+  },false);
+
+  removeChar.addEventListener('click', (ev) => {
     let currChars = JSON.parse(localStorage.getItem('chars'));
     delete currChars[character];
     localStorage.setItem('chars', JSON.stringify(currChars));
     ev.stopPropagation();
     buildCharList(lifecycle);
   })
+
+  cancelChar.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    del.style.display = "none";
+  })
+
   charDiv.appendChild(del);
+  del.appendChild(removeChar);
+  del.appendChild(cancelChar);
 }
 
 // listens for controller script to determine if scripts need to be injected

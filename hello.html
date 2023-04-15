@@ -182,13 +182,20 @@
     input {
       max-width: 100%
     }
+    #deleteMenu {
+      display: none;
+      z-index: 100;
+      flex-direction: column;
+      float: left;
+      overflow: visible;
+      position: absolute;
+    }
     .delButton {
-      /* display: none; */
-      float: right;
-      font-size: 7px;
+      opacity: 0.8;
     }
     .delButton:hover {
       background-color: #F9EBEA;
+      opacity: 1;
     }
     </style>
     <script src="./src/background.js"></script>
