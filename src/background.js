@@ -77,6 +77,11 @@ class InfestationLifecycle {
     }
   }
 
+  sync(ui) {
+    ui.toggleClearButton(this.state.infest);
+    ui.toggleFreezeButton(this.state.infest);
+  }
+
   // tells main.js to change the character, restart infestation
   infest(e, ui) {
     // choosing character does nothing if scripts aren't ready
@@ -367,7 +372,10 @@ chrome.runtime.onMessage.addListener(
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if( request.message === "ready_to_infest" ) {
-      lifecycle.state.ready = true;
+      Object.keys(lifecycle.state).forEach((key) => {
+        if (key in request.state) lifecycle.state[key] = request.state[key]
+      });
+      lifecycle.sync(ui);
     }
   }
 );
@@ -407,5 +415,4 @@ document.addEventListener('DOMContentLoaded', async function () {
   // always load from source for now...
   retrieveOptions();
   retrieveChars(lifecycle, ui);
-
 });

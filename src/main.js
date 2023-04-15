@@ -18,5 +18,8 @@ $(document).ready(function() {
     }
   );
   state.ready = true;
-  chrome.runtime.sendMessage({"message": "ready_to_infest"});
+  chrome.runtime.sendMessage({
+    "message": "ready_to_infest",
+    state: state,
+  });
 });
