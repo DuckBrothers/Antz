@@ -100,6 +100,14 @@
       flex-direction: row;
       border-radius: 5px;
     }
+    .enabled-infest-button {
+      color: WHITE;
+      cursor: pointer;
+    }
+    .disabled-infest-button {
+      color: transparent;
+      cursor: not-allowed;
+    }
     .infest-padding {
       width: 5%;
       /* height: 100% */
@@ -215,9 +223,9 @@
           </div>
           <div id="infest-button-container">
             <div class="infest-padding"></div>
-            <div id="clear-button" class="infest-button">CLEAR</div>
+            <div id="clear-button" class="infest-button disabled-infest-button">CLEAR</div>
             <div class="infest-padding"></div>
-            <div id="freeze-button" class="infest-button">FREEZE</div>
+            <div id="freeze-button" class="infest-button disabled-infest-button">FREEZE</div>
             <div class="infest-padding"></div>
           </div>
         </div>

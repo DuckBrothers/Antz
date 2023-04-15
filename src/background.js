@@ -18,29 +18,50 @@ const addCharInfo = {
   expanded: false,
 }
 
-class TabController {
+class UIController {
   constructor() {
-    this.displayed = '';
+    this.tab_content = '';
     this.tablist = ['infest', 'configure'];
   }
 
   displayInfest() {
-    this.setTabContent('infest', 'configure');
+    this.displayTabContent('infest', 'configure');
   }
 
   displayConfigure() {
-    this.setTabContent('configure', 'infest');
+    this.displayTabContent('configure', 'infest');
   }
 
-  setTabContent(display, hide) {
+  displayTabContent(display, hide) {
     if (!this.tablist.includes(display) || !this.tablist.includes(hide)) return;
-    if (display == this.displayed) return;
+    if (display == this.tab_content) return;
 
-    this.displayed = display;
+    this.tab_content = display;
     let tabToDisplay = document.getElementById(display);
     let tabToHide = document.getElementById(hide);
     tabToDisplay.style.display = 'inherit';
     tabToHide.style.display = 'none';
+  }
+
+  toggleClearButton(enable) {
+    this.toggleInfestButton('clear-button', enable);
+  }
+
+  toggleFreezeButton(enable) {
+    this.toggleInfestButton('freeze-button', enable);
+  }
+
+  toggleUnfreezeText(frozen) {
+    let freezeText = frozen ? 'UNFREEZE' : 'FREEZE';
+    document.getElementById('freeze-button').innerText = freezeText;
+  }
+
+  toggleInfestButton(button, enable) {
+    let toggled = document.getElementById(button);
+    let addClass = enable ? 'enabled-infest-button' : 'disabled-infest-button';
+    let remClass = (!enable) ? 'enabled-infest-button' : 'disabled-infest-button';
+    toggled.classList.remove(remClass);
+    toggled.classList.add(addClass);
   }
 }
 
@@ -57,7 +78,7 @@ class InfestationLifecycle {
   }
 
   // tells main.js to change the character, restart infestation
-  infest(e) {
+  infest(e, ui) {
     // choosing character does nothing if scripts aren't ready
     if (!this.state.ready || !localStorage.getItem('chars') || !localStorage.getItem('options')) return;
 
@@ -74,10 +95,14 @@ class InfestationLifecycle {
       };
       chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
     });
-    // TODO: UPDATE UI - ENABLE FREEZE and CLEAR
+
+    ui.toggleClearButton(true);
+    ui.toggleFreezeButton(true);
+    ui.toggleUnfreezeText(this.state.freeze);
   }
 
-  freeze() {
+  freeze(ui) {
+    if (!this.state.infest) return;
     this.state.freeze = !this.state.freeze;
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
       let activeTab = tabs[0];
@@ -86,10 +111,12 @@ class InfestationLifecycle {
       };
       chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
     });
-    // TODO: UPDATE UI - FREEZE vs UNFREEZE, and DISABLED when NO INFEST
+
+    ui.toggleUnfreezeText(this.state.freeze);
   }
 
-  clear() {
+  clear(ui) {
+    if (!this.state.infest) return;
     this.state.infest = false;
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
       let activeTab = tabs[0];
@@ -98,12 +125,14 @@ class InfestationLifecycle {
       };
       chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
     });
+
+    ui.toggleClearButton(false);
+    ui.toggleFreezeButton(false);
   }
-  // TODO: UPDATE UI - DISABLED when NO INFEST
 }
 
 
-let tabController = new TabController();
+let ui = new UIController();
 let lifecycle = new InfestationLifecycle();
 
 async function getTabId() {
@@ -157,13 +186,13 @@ const retrieveCharacters = () => {
   return characters;
 }
 
-function retrieveChars(lifecycle) {
+function retrieveChars(lifecycle, ui) {
   fetch('./src/characters.json')
   .then(response => response.json())
   .then(res => {
     // chars = res;
     localStorage.setItem('chars', JSON.stringify(res));
-    buildCharList(lifecycle);
+    buildCharList(lifecycle, ui);
     console.log('wrote to local chars');
   });
 }
@@ -221,7 +250,7 @@ function changeOptions() {
   toggle(optionsInfo);
 }
 
-function addChar(lifecycle) {
+function addChar(lifecycle, ui) {
   let extracted = extractFormData(addCharInfo);
   console.log(extracted);
   let currChars = JSON.parse(localStorage.getItem('chars'));
@@ -232,7 +261,7 @@ function addChar(lifecycle) {
   currChars[extracted.type] = extracted;
   localStorage.setItem('chars', JSON.stringify(currChars));
   toggle(addCharInfo);
-  buildCharList(lifecycle);
+  buildCharList(lifecycle, ui);
 }
 
 function extractFormData(info) {
@@ -249,7 +278,7 @@ function extractFormData(info) {
   return extractedData;
 }
 
-function buildCharList(lifecycle) {
+function buildCharList(lifecycle, ui) {
   const charContainer = document.getElementById('characters');
   while (charContainer.firstChild) {
     charContainer.removeChild(charContainer.firstChild);
@@ -270,14 +299,14 @@ function buildCharList(lifecycle) {
     charImg.setAttribute('src', characterInfo.icon);
     charImg.style.height = 'auto';
     charImg.style.width = '55px';
-    insertDelete(character, charDiv, lifecycle);
+    insertDelete(character, charDiv, lifecycle, ui);
     charDiv.appendChild(charImg);
-    charDiv.addEventListener('click', (e) => lifecycle.infest(e));
+    charDiv.addEventListener('click', (e) => lifecycle.infest(e, ui));
     charContainer.appendChild(charDiv);
   }
 }
 
-function insertDelete(character, charDiv, lifecycle) {
+function insertDelete(character, charDiv, lifecycle, ui) {
   let del = document.createElement('div');
   del.id = 'deleteMenu';
 
@@ -302,7 +331,7 @@ function insertDelete(character, charDiv, lifecycle) {
     delete currChars[character];
     localStorage.setItem('chars', JSON.stringify(currChars));
     ev.stopPropagation();
-    buildCharList(lifecycle);
+    buildCharList(lifecycle, ui);
   })
 
   cancelChar.addEventListener('click', (ev) => {
@@ -339,18 +368,18 @@ document.addEventListener('DOMContentLoaded', async function () {
   // keeps us in sync with injected scripts
   injectController().then(() => console.log("injected controller scripts"));
 
-  tabController.displayInfest();
-  document.getElementById('infest-tab').addEventListener('click', () => tabController.displayInfest());
-  document.getElementById('configure-tab').addEventListener('click', () => tabController.displayConfigure());
+  ui.displayInfest();
+  document.getElementById('infest-tab').addEventListener('click', () => ui.displayInfest());
+  document.getElementById('configure-tab').addEventListener('click', () => ui.displayConfigure());
 
-  document.getElementById('clear-button').addEventListener('click', () => lifecycle.clear());
-  document.getElementById('freeze-button').addEventListener('click', () => lifecycle.freeze());
+  document.getElementById('clear-button').addEventListener('click', () => lifecycle.clear(ui));
+  document.getElementById('freeze-button').addEventListener('click', () => lifecycle.freeze(ui));
 
   document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo)});
   document.getElementById('addCharToggle').addEventListener('click', () => {toggle(addCharInfo)});
 
   document.getElementById('submitOptions').addEventListener('click', changeOptions);
-  document.getElementById('submitAddChar').addEventListener('click', addChar);
+  document.getElementById('submitAddChar').addEventListener('click', () => addChar(lifecycle, ui));
 
   ['change', 'paste', 'keyup', 'keydown', 'mouseup'].forEach((myEvent) => {
       document.getElementById('iconInput').addEventListener(myEvent, () => {syncPreview('iconInput')});
@@ -359,13 +388,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   // if (!localStorage.getItem('options')) retrieveOptions();
   // if (!localStorage.getItem('chars')) {
-  //   retrieveChars(lifecycle);
+  //   retrieveChars(lifecycle, ui);
   // } else {
-  //   buildCharList(lifecycle);
+  //   buildCharList(lifecycle, ui);
   // }
 
   // always load from source for now...
   retrieveOptions();
-  retrieveChars(lifecycle);
+  retrieveChars(lifecycle, ui);
 
 });
