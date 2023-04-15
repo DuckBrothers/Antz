@@ -2,6 +2,7 @@
 
 if (typeof(state) !== 'undefined') {
   // scripts have already been injected
+  console.log("Scripts already injected!");
   if (state.ready) chrome.runtime.sendMessage({"message": "ready_to_infest"});
 } else {
   chrome.runtime.sendMessage({"message": "ready_to_inject"});

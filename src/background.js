@@ -108,6 +108,8 @@ class InfestationLifecycle {
       let activeTab = tabs[0];
       let req = {
         "message": "update_state",
+        "chars": retrieveCharacters(),
+        "options": JSON.parse(localStorage.getItem('options'))
       };
       chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
     });
@@ -122,6 +124,8 @@ class InfestationLifecycle {
       let activeTab = tabs[0];
       let req = {
         "message": "update_state",
+        "chars": retrieveCharacters(),
+        "options": JSON.parse(localStorage.getItem('options'))
       };
       chrome.tabs.sendMessage(activeTab.id, {...this.state, ...req});
     });
@@ -232,7 +236,7 @@ function toggle(info) {
       let elem = document.getElementById(`${key}Input`);
       if (elem) {
         elem.setAttribute('placeholder', curr[key].toString());
-        if (key === 'replace' || key === 'random' || key === 'snap' || key === 'rotate' || key === 'reflect') {elem.checked = curr[key];}
+        if (key === 'replace' || key === 'random' || key === 'snap' || key === 'hide' || key === 'words' || key === 'rotate' || key === 'reflect') {elem.checked = curr[key];}
       }
     }
   }
@@ -275,7 +279,7 @@ function extractFormData(info) {
   for (let eKey of info.extractionKeys) {
     let elem = document.getElementById(`${eKey}Input`);
     if (elem) {
-      if (eKey === 'replace' || eKey === 'random' || eKey === 'snap' || eKey === 'rotate' || eKey === 'reflect') {extractedData[eKey] = elem.checked;}
+      if (eKey === 'replace' || eKey === 'random' || eKey === 'snap' || eKey === 'hide' || eKey === 'words' || eKey === 'rotate' || eKey === 'reflect') {extractedData[eKey] = elem.checked;}
       else if (eKey === 'icon' || eKey === 'dead') {extractedData[eKey] = elem.value || elem.getAttribute('placeholder');}
       else if (eKey === 'type') {extractedData[eKey] = (elem.value || elem.getAttribute('placeholder')).replace(/\W/g, '');}
       else {extractedData[eKey] = parseInt(elem.value || elem.getAttribute('placeholder'));};
