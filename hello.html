@@ -234,29 +234,29 @@
             <div id="optionsToggle" class="toggle"><h3>behavior options</h3></div>
             <div id="innerOptions" class="innerForm">
               <p>Icon Size (px)</p>
-              <input type="number" id="sizeInput" placeholder='20' max='100' min='5'>
+              <input title="Size of on-screen characters" type="number" id="sizeInput" placeholder='20' max='100' min='5'>
               <p>Icon Clickzone (px)</p>
-              <input type="number" id="killzoneInput" placeholder='40' max='120' min='5'>
+              <input title="Size of clickable zone for on-screen characters" type="number" id="killzoneInput" placeholder='40' max='120' min='5'>
               <p>Move Speed (ms)</p>
-              <input type="number" id="speedInput" placeholder='100' max='500' min='50'>
+              <input title="Period between character moves" type="number" id="speedInput" placeholder='100' max='500' min='50'>
               <p>Move Dist (px)</p>
-              <input type="number" id="distanceInput" placeholder='10' max='50' min='5'>
+              <input title="Distance of character moves" type="number" id="distanceInput" placeholder='10' max='50' min='5'>
               <p>Spawn Frequency (ms)</p>
-              <input type="number" id="frequencyInput" placeholder='1000' max='100000' min='200'>
+              <input title="How often a new character spans" type="number" id="frequencyInput" placeholder='1000' max='100000' min='200'>
               <p>Max (per wave)</p>
-              <input type="number" id="waveInput" placeholder='20' max='100' min='1'>
+              <input title="How many character spawn per wave (character menu click)" type="number" id="waveInput" placeholder='20' max='100' min='1'>
               <p>Max (on screen)</p>
-              <input type="number" id="maxInput" placeholder='40' max='100' min='1'>
+              <input title="How many characters can be on screen at once" type="number" id="maxInput" placeholder='40' max='100' min='1'>
               <p>Spawn from Words</p>
-              <input type="checkbox" class= "check" id="wordsInput">
+              <input title="Whether characters spawn from the page's text&#010;If not, all following options are ignored" type="checkbox" class= "check" id="wordsInput">
               <p>Shuffle Words</p>
-              <input type="checkbox" class= "check" id="randomInput">
+              <input title="Whether to spawn characters from the text randomly (or in order)" type="checkbox" class= "check" id="randomInput">
               <p>Hide Words</p>
-              <input type="checkbox" class="check" id="hideInput">
+              <input title="Whether to make words disappear when character spawn from them" type="checkbox" class="check" id="hideInput">
               <p>Replace Words</p>
-              <input type="checkbox" class="check" id="replaceInput">
+              <input title="Whether to change words when characters spawns from them" type="checkbox" class="check" id="replaceInput">
               <p>Snap to Screen</p>
-              <input type="checkbox" class="check" id="snapInput">
+              <input title="Currently unused :(" type="checkbox" class="check" id="snapInput">
               <br><br>
               <input type='button' id='submitOptions' class='submit' value='save'>
             </div>
@@ -265,22 +265,22 @@
             <div id="addCharToggle" class="toggle"><h3>add character</h3></div>
             <div id="innerAddChar" class="innerForm">
               <p>Image URL</p>
-              <input type="url" id="iconInput" placeholder='https://s12.gifyu.com/images/eevee.gif'>
+              <input title="Image link to character icon on screen and in select menu" type="url" id="iconInput" placeholder='https://s12.gifyu.com/images/eevee.gif'>
               <img class='preview' src='https://s12.gifyu.com/images/eevee.gif' id='iconInputPreview' ></img>
               <p>Squish URL</p>
-              <input type="url" id="deadInput" placeholder='https://s11.gifyu.com/images/pb-catch.png'>
+              <input title="Image link to character icon when clicked and removed" type="url" id="deadInput" placeholder='https://s11.gifyu.com/images/pb-catch.png'>
               <img class='preview' src='https://s11.gifyu.com/images/pb-catch.png' id='deadInputPreview' ></img>
               <p>Cursor URL</p>
-              <input type="url" id="cursorInput" placeholder='https://s12.gifyu.com/images/pokeball.png'>
+              <input title="Image link to cursor icon - 32x32 pixels or smaller" type="url" id="cursorInput" placeholder='https://s12.gifyu.com/images/pokeball.png'>
               <img class='preview' src='https://s12.gifyu.com/images/pokeball.png' id='cursorInputPreview' ></img>
               <p>Character</p>
-              <input type="text" placeholder='e.g. ant' id="typeInput">
+              <input title="Character name - just used internally" type="text" placeholder='e.g. ant' id="typeInput">
               <p>Rotate to direction</p>
-              <input type="checkbox" class="check" id="rotateInput">
+              <input title="Rotate character icon based on movement direction&#010;If not checked, creates spooky floating effect" type="checkbox" class="check" id="rotateInput">
               <p>Reflect</p>
-              <input title="Reflect upright when image is rotated upside-down" type="checkbox" class="check" id="reflectInput">
-              <p>Angle (clockwise from up)</p>
-              <input type="number" placeholder='0' max='359' min='0' id="angleInput">
+              <input title="Reflect upright when image is rotated upside-down&#010;Necessary for side-view, but not top-down characters" type="checkbox" class="check" id="reflectInput">
+              <p>Angle (clockwise to up)</p>
+              <input title="How far the image must rotate (clockwise) to be facing up" type="number" placeholder='0' max='359' min='0' id="angleInput">
               <br><br><br>
               <input type='button' id='submitAddChar' class='submit' value='save'>
             </div>

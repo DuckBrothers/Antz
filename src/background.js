@@ -22,15 +22,44 @@ class UIController {
   constructor() {
     this.tab_content = '';
     this.tablist = ['infest', 'configure'];
+    this.infestInstructions = '';
+    this.configInstructions = '';
   }
 
   displayInfest() {
     this.displayTabContent('infest', 'configure');
+    this.setInfestInstructions();
   }
 
   displayConfigure() {
     this.displayTabContent('configure', 'infest');
+    this.setConfigInstructions();
   }
+
+  setInfestInstructions(instructions) {
+    if (instructions) this.infestInstructions = instructions;
+    document.getElementById('instructions').innerHTML = this.infestInstructions;
+  }
+
+  specifyInfestInstructions(infest) {
+    if (infest) return this.setInfestInstructions('Freeze or Clear infestation.<br><br>Or choose another Character to start a new wave!');
+    this.setInfestInstructions('Choose a Character to start an infection!');
+  }
+
+  setConfigInstructions(instructions) {
+    if (instructions) this.configInstructions = instructions;
+    document.getElementById('instructions').innerHTML = this.configInstructions;
+  }
+
+  specifyOverallConfigInstructions() {
+    this.setConfigInstructions('Add a new character or select spawn and movement behavior options.')
+  }
+
+  specifyConfigTabInstructions(info) {
+    if (info.type == 'chars') this.setConfigInstructions('Create a new Custom Character.<br><br>Images work best with transparent backgrounds & square dimensions.<br><br>To go back, Save or click "add character" text again.');
+    if (info.type == 'options') this.setConfigInstructions('Specify movement behavior and character spawn options.<br><br>Changes take effect on next wave after Save!<br><br>To go back, Save or click "behavior options" text again. ');
+  }
+
 
   displayTabContent(display, hide) {
     if (!this.tablist.includes(display) || !this.tablist.includes(hide)) return;
@@ -80,6 +109,8 @@ class InfestationLifecycle {
   sync(ui) {
     ui.toggleClearButton(this.state.infest);
     ui.toggleFreezeButton(this.state.infest);
+    ui.specifyInfestInstructions(this.state.infest);
+    ui.specifyOverallConfigInstructions();
   }
 
   // tells main.js to change the character, restart infestation
@@ -104,6 +135,7 @@ class InfestationLifecycle {
     ui.toggleClearButton(true);
     ui.toggleFreezeButton(true);
     ui.toggleUnfreezeText(this.state.freeze);
+    ui.specifyInfestInstructions(this.state.infest);
   }
 
   freeze(ui) {
@@ -137,6 +169,7 @@ class InfestationLifecycle {
 
     ui.toggleClearButton(false);
     ui.toggleFreezeButton(false);
+    ui.specifyInfestInstructions(this.state.infest);
   }
 }
 
@@ -223,12 +256,13 @@ function syncPreview(urlType) {
 }
 
 
-function toggle(info) {
+function toggle(info, ui) {
   if (info.expanded) {
     let innerForm = document.getElementById(info.innerForm)
     innerForm.style.display = 'none';
     document.getElementById(info.otherToggle).style.display = 'inline';
     info.expanded = false;
+    ui.specifyOverallConfigInstructions();
     return;
   }
 
@@ -250,14 +284,15 @@ function toggle(info) {
   innerForm.style.display = 'inline';
   document.getElementById(info.otherToggle).style.display = 'none';
   info.expanded = true;
+  ui.specifyConfigTabInstructions(info);
 }
 
 
-function changeOptions(lifecycle) {
+function changeOptions(lifecycle, ui) {
   let extracted = extractFormData(optionsInfo);
   lifecycle.state.options = extracted;
   localStorage.setItem('options', JSON.stringify(extracted));
-  toggle(optionsInfo);
+  toggle(optionsInfo, ui);
 }
 
 function addChar(lifecycle, ui) {
@@ -266,7 +301,7 @@ function addChar(lifecycle, ui) {
   let currChars = JSON.parse(localStorage.getItem('chars'));
   currChars[extracted.type] = extracted;
   localStorage.setItem('chars', JSON.stringify(currChars));
-  toggle(addCharInfo);
+  toggle(addCharInfo, ui);
   buildCharList(lifecycle, ui);
 }
 
@@ -394,10 +429,10 @@ document.addEventListener('DOMContentLoaded', async function () {
   document.getElementById('clear-button').addEventListener('click', () => lifecycle.clear(ui));
   document.getElementById('freeze-button').addEventListener('click', () => lifecycle.freeze(ui));
 
-  document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo)});
-  document.getElementById('addCharToggle').addEventListener('click', () => {toggle(addCharInfo)});
+  document.getElementById('optionsToggle').addEventListener('click', () => {toggle(optionsInfo, ui)});
+  document.getElementById('addCharToggle').addEventListener('click', () => {toggle(addCharInfo, ui)});
 
-  document.getElementById('submitOptions').addEventListener('click', () => changeOptions(lifecycle));
+  document.getElementById('submitOptions').addEventListener('click', () => changeOptions(lifecycle, ui));
   document.getElementById('submitAddChar').addEventListener('click', () => addChar(lifecycle, ui));
 
   ['change', 'paste', 'keyup', 'keydown', 'mouseup'].forEach((myEvent) => {
