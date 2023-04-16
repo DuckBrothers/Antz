@@ -17,7 +17,7 @@
       margin: 0px;
       padding: 0px;
       border: 0px;
-      background: black;
+      background: #557B83;
       /* border-radius: 2%; */
       display: flex;
       flex-direction: row;
@@ -29,14 +29,14 @@
       width: 90%;
       margin: 0px;
       padding: 0px;
-      background: RED;
+      /* background: #557B83; */
     }
     #tabs-container {
       /* width: 100%; */
       margin: 0px;
       padding: 0px;
       border: 0px;
-      background: PURPLE;
+      /* background: PURPLE; */
       display: flex;
       height: 20px;
       /* justify-content: center; */
@@ -48,30 +48,35 @@
       width: 50%;
       /* height: 100% */
       margin: 0px;
-      padding: 5px;
+      padding: 2px;
       border: 0px;
-      background: RED;
+      /* background: RED; */
       align-items: center;
       flex-direction: row;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
     }
     #infest-tab {
-      background: BLUE;
+      background: #A2D5AB;
+      cursor: pointer;
     }
     #configure-tab {
-      background: ORANGE;
+      background: #39AEA9;
+      cursor: pointer;
     }
     #infest {
-      background: BLUE;
+      background: #A2D5AB;
       display: none;
     }
+    /* #A2D5AB; */
     #configure {
-      background: ORANGE;
+      background: #39AEA9;
       display: none;
+      margin: 0px;
+      padding: 5px;
     }
     #characters {
-      background: GREEN;
+      /* background: GREEN; */
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
@@ -93,9 +98,10 @@
       width: 40%;
       /* height: 100% */
       margin: 0px;
+      margin-bottom: 5px;
       padding: 5px;
       border: 0px;
-      background: YELLOW;
+      background: #557B83;
       align-items: center;
       flex-direction: row;
       border-radius: 5px;
@@ -114,7 +120,7 @@
       margin: 0px;
       padding: 0px;
       border: 0px;
-      background: LIME;
+      /* background: LIME; */
       align-items: center;
       flex-direction: row;
     }
@@ -123,6 +129,7 @@
     }
     .characterWrapper {
       border-radius: 50%;
+      cursor: pointer;
     }
     .character {
       height: auto;
@@ -139,7 +146,7 @@
     } */
     #title {
       color: WHITE;
-      background: GREY;
+      background: #557B83;
       width: 100%;
       /* height: 20px; */
       margin: 0px;
@@ -148,18 +155,24 @@
     }
     #instructions {
       color: WHITE;
-      background: GREY;
+      background: #557B83;
       width: 100%;
       /* height: 20px; */
-      margin: 0px;
-      padding: 0px;
+      margin: 5px;
+      padding: 5px;
       padding-bottom: 5px;
+    }
+    #optionsToggle {
+      cursor: pointer;
+    }
+    #addCharToggle {
+      cursor: pointer;
     }
     div:first-child {
       margin-top: 0px;
     }
     div {
-      cursor: pointer;
+      /* cursor: pointer; */
       text-align: center;
       /* padding: 1px 3px; */
       font-family: sans-serif;
@@ -173,10 +186,10 @@
       width: 25px;
     }
     .characterWrapper:hover {
-      background: #F9EBEA;
+      background: #E5EFC1;
     }
     .formWrapper:hover {
-      background: LightBlue;
+      background: #E5EFC1;
     }
     .innerForm {
       display: none;
@@ -215,8 +228,8 @@
       </div>
       <div id="content">
         <div id="tabs-container">
-          <div id="infest-tab" class="infest-configure-tab">infest</div>
-          <div id="configure-tab" class="infest-configure-tab">configure</div>
+          <div id="infest-tab" class="infest-configure-tab"><h3>infest</h3></div>
+          <div id="configure-tab" class="infest-configure-tab"><h3>configure</h3></div>
         </div>
         <div id="infest" class="sub-content">
           <div id="characters">
@@ -231,7 +244,7 @@
         </div>
         <div id="configure" class="sub-content">
           <div id="options" class="formWrapper">
-            <div id="optionsToggle" class="toggle"><h3>behavior options</h3></div>
+            <div id="optionsToggle" class="toggle"><h1>behavior options</h1></div>
             <div id="innerOptions" class="innerForm">
               <p>Icon Size (px)</p>
               <input title="Size of on-screen characters" type="number" id="sizeInput" placeholder='20' max='100' min='5'>
@@ -262,7 +275,7 @@
             </div>
           </div>
           <div id="addChar" class="formWrapper">
-            <div id="addCharToggle" class="toggle"><h3>add character</h3></div>
+            <div id="addCharToggle" class="toggle"><h1>add character</h1></div>
             <div id="innerAddChar" class="innerForm">
               <p>Image URL</p>
               <input title="Image link to character icon on screen and in select menu" type="url" id="iconInput" placeholder='https://s12.gifyu.com/images/eevee.gif'>
