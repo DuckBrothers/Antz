@@ -10,7 +10,7 @@
   "killzone": 40,
   "words": true,
   "random": false,
-  "hide": false,
-  "replace": true,
+  "hide": true,
+  "replace": false,
   "snap": false
 }

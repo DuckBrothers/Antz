@@ -5,8 +5,8 @@
     "cursor": "url(SWAP_ME/img/pokeball.png), default",
     "type": "pikachu",
     "words": [
-      "", "! ", "go ", "zap ", "jolt ", "pichu ", "raichu ",
-      "pikachu ", "electric ", "pikach", "u", "u "
+      "", "!", "go", "zap", "jolt", "pichu", "raichu",
+      "pikachu", "electric", "pikach", "u", "u"
     ],
     "wordOffset": 7,
     "wordCutoff": 9,
@@ -20,8 +20,8 @@
     "cursor": "url(SWAP_ME/img/pokeball.png), default",
     "type": "bulba",
     "words": [
-      "", "! ", "go ", "ivy ", "vine ", "bulba ", "growth ",
-      "ivysaur ", "venusaur ", "bulbasa", "a", "ur "
+      "", "!", "go", "ivy", "vine", "bulba", "growth",
+      "ivysaur", "venusaur", "bulbasa", "a", "ur"
     ],
     "wordOffset": 9,
     "wordCutoff": 9,
@@ -35,8 +35,8 @@
     "cursor": "url(SWAP_ME/img/pokeball.png), default",
     "type": "squirtle",
     "words": [
-      "", "! ", "go ", "wet ", "blue ", "hydro ", "splash ",
-      "swimmer ", "squirtle ", "squ", "i", "rtle "
+      "", "!", "go", "wet", "blue", "hydro", "splash",
+      "swimmer", "squirtle", "squ", "i", "rtle"
     ],
     "wordOffset": 7,
     "wordCutoff": 9,
@@ -50,8 +50,8 @@
     "cursor": "url(SWAP_ME/img/pokeball.png), default",
     "type": "char",
     "words": [
-      "", "! ", "go ", "hot ", "char ", "ember ", "mander ", "inferno ",
-      "evolving ", "chariza", "a", "rd "
+      "", "!", "go", "hot", "char", "ember", "mander", "inferno",
+      "evolving", "chariza", "a", "rd"
     ],
     "wordOffset": 9,
     "wordCutoff": 9,
@@ -65,8 +65,8 @@
     "cursor": "grab",
     "type": "ant",
     "words": [
-      "", "! ", "ew ", "ant ", "hill ", "queen ", "picnic ",
-      "insects ", "crawling ", "sm", "o", "sh "
+      "", "!", "ew", "ant", "hill", "queen", "picnic",
+      "insects", "crawling", "sm", "o", "sh"
     ],
     "wordOffset": 4,
     "wordCutoff": 9,
@@ -80,8 +80,8 @@
     "cursor": "zoom-in",
     "type": "ghost",
     "words": [
-      "", "! ", "ah ", "boo ", "dead ", "ghost ", "spooky ",
-      "haunted ", "floating ", "bo", "o", "oo "
+      "", "!", "ah", "boo", "dead", "ghost", "spooky",
+      "haunted", "floating", "bo", "o", "oo"
     ],
     "wordOffset": 4,
     "wordCutoff": 8,

@@ -70,7 +70,7 @@ class Infestation {
     if (this.options.hide) {
       nextWord.style.opacity = 0;
     } else if (this.options.replace && this.character.words.length) {
-      let replacementWord = matchReplacementWord(this.character, nextWord.innerText.length-1);
+      let replacementWord = matchReplacementWord(this.character, nextWord.innerText.length);
       console.log(`Replacing word "${nextWord}" with "${replacementWord}"`);
       nextWord.innerText = replacementWord;
     }

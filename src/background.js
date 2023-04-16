@@ -273,7 +273,7 @@ function addChar(lifecycle, ui) {
 function processCustomCharacter(specs) {
   let r = (Math.random() + 1).toString(36).substring(7); // random digits
   specs.type = `${specs.type}_${r}`;
-  specs.words = ['', 'x ', 'xx ', 'x', 'x', 'x '];
+  specs.words = ['', 'x', 'xx', 'x', 'x', 'x'];
   specs.wordOffset = 2;
   specs.wordCutoff = 2;
   specs.cursor = `url(${specs.cursor}), default`;
