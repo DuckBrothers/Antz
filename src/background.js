@@ -1,4 +1,6 @@
-// this background code defines the logic for the popup and injects our scripts
+/**
+This background code defines the logic for the popup and injects our scripts
+*/
 
 // object specs for generating UI for option config and adding new characters
 const optionsInfo = {
@@ -18,6 +20,7 @@ const addCharInfo = {
   expanded: false,
 }
 
+// stores state and logic related to which UI elements and text snippets should render
 class UIController {
   constructor() {
     this.tab_content = '';
@@ -229,7 +232,7 @@ const retrieveCharacters = () => {
 }
 
 function retrieveChars(lifecycle, ui) {
-  fetch('./src/characters.json')
+  fetch('./data/characters.json')
   .then(response => response.json())
   .then(res => {
     // chars = res;
@@ -240,7 +243,7 @@ function retrieveChars(lifecycle, ui) {
 }
 
 function retrieveOptions() {
-  fetch('./src/options.json')
+  fetch('./data/options.json')
   .then(response => response.json())
   .then(res => {
     // options = res;
@@ -255,7 +258,7 @@ function syncPreview(urlType) {
   document.getElementById(`${urlType}Preview`).setAttribute('src', url);
 }
 
-
+// TODO: add toggle and other configuration logic fully into UIController
 function toggle(info, ui) {
   if (info.expanded) {
     let innerForm = document.getElementById(info.innerForm)
@@ -357,6 +360,7 @@ function buildCharList(lifecycle, ui) {
   }
 }
 
+// inserts delete functionality (right click -> delete menu) for custom chars
 function insertDelete(character, charDiv, lifecycle, ui) {
   // cannot delete default cast
   if (new Array('pikachu', 'bulba', 'squirtle', 'char', 'ant', 'ghost').includes(character)) return;
@@ -446,14 +450,14 @@ document.addEventListener('DOMContentLoaded', async function () {
       document.getElementById('cursorInput').addEventListener(myEvent, () => {syncPreview('cursorInput')});
   })
 
-  // if (!localStorage.getItem('options')) retrieveOptions();
-  // if (!localStorage.getItem('chars')) {
-  //   retrieveChars(lifecycle, ui);
-  // } else {
-  //   buildCharList(lifecycle, ui);
-  // }
+  if (!localStorage.getItem('options')) retrieveOptions();
+  if (!localStorage.getItem('chars')) {
+    retrieveChars(lifecycle, ui);
+  } else {
+    buildCharList(lifecycle, ui);
+  }
 
-  // always load from source for now...
-  retrieveOptions();
-  retrieveChars(lifecycle, ui);
+  // to always load from source config (during revelopment), comment out above
+  // retrieveOptions();
+  // retrieveChars(lifecycle, ui);
 });
