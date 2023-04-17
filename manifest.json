@@ -1,7 +1,7 @@
 {
   "name": "Ants",
   "description": "A life-changing productivity hack",
-  "version": "1.3",
+  "version": "2.0",
   "permissions": [
     "tabs",
     "scripting"
