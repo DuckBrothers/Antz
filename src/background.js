@@ -43,7 +43,7 @@ class UIController {
 
   specifyInfestInstructions(infest) {
     if (infest) return this.setInfestInstructions('Freeze or Clear infestation.<br><br>Or choose another Character to start a new wave!');
-    this.setInfestInstructions('Choose a Character to start an infection!');
+    this.setInfestInstructions('Choose a Character to start an infestation!<br><br>Or remove a Custom Character via right click.');
   }
 
   setConfigInstructions(instructions) {
@@ -52,12 +52,12 @@ class UIController {
   }
 
   specifyOverallConfigInstructions() {
-    this.setConfigInstructions('Add a new character or select spawn and movement behavior options.')
+    this.setConfigInstructions('Add a new Custom Character - or select spawn and movement behavior options.');
   }
 
   specifyConfigTabInstructions(info) {
-    if (info.type == 'chars') this.setConfigInstructions('Create a new Custom Character.<br><br>Images work best with transparent backgrounds & square dimensions.<br><br>To go back, Save or click "add character" text again.');
-    if (info.type == 'options') this.setConfigInstructions('Specify movement behavior and character spawn options.<br><br>Changes take effect on next wave after Save!<br><br>To go back, Save or click "behavior options" text again. ');
+    if (info.type == 'chars') this.setConfigInstructions('Create a new Custom Character.<br><br>Images work best with transparent backgrounds & square dimensions.');
+    if (info.type == 'options') this.setConfigInstructions('Specify movement behavior and character spawn options.<br><br>Changes take effect on next wave after Save!');
   }
 
 
@@ -109,8 +109,8 @@ class InfestationLifecycle {
   sync(ui) {
     ui.toggleClearButton(this.state.infest);
     ui.toggleFreezeButton(this.state.infest);
-    ui.specifyInfestInstructions(this.state.infest);
     ui.specifyOverallConfigInstructions();
+    ui.specifyInfestInstructions(this.state.infest);
   }
 
   // tells main.js to change the character, restart infestation
@@ -358,6 +358,8 @@ function buildCharList(lifecycle, ui) {
 }
 
 function insertDelete(character, charDiv, lifecycle, ui) {
+  // cannot delete default cast
+  if (new Array('pikachu', 'bulba', 'squirtle', 'char', 'ant', 'ghost').includes(character)) return;
   let del = document.createElement('div');
   del.id = 'deleteMenu';
 
@@ -434,6 +436,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   document.getElementById('submitOptions').addEventListener('click', () => changeOptions(lifecycle, ui));
   document.getElementById('submitAddChar').addEventListener('click', () => addChar(lifecycle, ui));
+
+  document.getElementById('backOptions').addEventListener('click', () => {toggle(optionsInfo, ui)});
+  document.getElementById('backAddChar').addEventListener('click', () => {toggle(addCharInfo, ui)});
 
   ['change', 'paste', 'keyup', 'keydown', 'mouseup'].forEach((myEvent) => {
       document.getElementById('iconInput').addEventListener(myEvent, () => {syncPreview('iconInput')});

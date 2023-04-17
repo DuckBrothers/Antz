@@ -29,6 +29,7 @@
       width: 90%;
       margin: 0px;
       padding: 0px;
+      color: #557B83;
       /* background: #557B83; */
     }
     #tabs-container {
@@ -61,7 +62,7 @@
       cursor: pointer;
     }
     #configure-tab {
-      background: #39AEA9;
+      background: #E5EFC1;
       cursor: pointer;
     }
     #infest {
@@ -70,7 +71,7 @@
     }
     /* #A2D5AB; */
     #configure {
-      background: #39AEA9;
+      background: #E5EFC1;
       display: none;
       margin: 0px;
       padding: 5px;
@@ -101,17 +102,18 @@
       margin-bottom: 5px;
       padding: 5px;
       border: 0px;
-      background: #557B83;
+      background: #E5EFC1;
       align-items: center;
       flex-direction: row;
       border-radius: 5px;
+      color: #557B83;
     }
     .enabled-infest-button {
-      color: WHITE;
+      /* color: #557B83; */
       cursor: pointer;
     }
     .disabled-infest-button {
-      color: transparent;
+      /* color: transparent; */
       cursor: not-allowed;
     }
     .infest-padding {
@@ -188,7 +190,7 @@
     .characterWrapper:hover {
       background: #E5EFC1;
     }
-    .formWrapper:hover {
+    .toggle:hover {
       background: #E5EFC1;
     }
     .innerForm {
@@ -228,8 +230,8 @@
       </div>
       <div id="content">
         <div id="tabs-container">
-          <div id="infest-tab" class="infest-configure-tab"><h3>infest</h3></div>
-          <div id="configure-tab" class="infest-configure-tab"><h3>configure</h3></div>
+          <div id="infest-tab" class="infest-configure-tab"><h3>INFEST</h3></div>
+          <div id="configure-tab" class="infest-configure-tab"><h3>CONFIGURE</h3></div>
         </div>
         <div id="infest" class="sub-content">
           <div id="characters">
@@ -272,6 +274,7 @@
               <input title="Currently unused :(" type="checkbox" class="check" id="snapInput">
               <br><br>
               <input type='button' id='submitOptions' class='submit' value='save'>
+              <input type='button' id='backOptions' class='submit' value='back'>
             </div>
           </div>
           <div id="addChar" class="formWrapper">
@@ -296,11 +299,12 @@
               <input title="How far the image must rotate (clockwise) to be facing up" type="number" placeholder='0' max='359' min='0' id="angleInput">
               <br><br><br>
               <input type='button' id='submitAddChar' class='submit' value='save'>
+              <input type='button' id='backAddChar' class='submit' value='back'>
             </div>
           </div>
         </div>
       </div>
-      <div id="instructions"><p>Choose a Character to start an infection!</p></div>
+      <div id="instructions"></div>
     </div>
   </body>
 </html>
