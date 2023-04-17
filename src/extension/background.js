@@ -191,7 +191,7 @@ async function getTabId() {
 async function injectController() {
   await chrome.scripting.executeScript({
     target : {tabId : await getTabId(), allFrames : false},
-    files : [ "./src/initializer.js" ],
+    files : [ "src/injection/initializer.js" ],
   })
   console.log("Controller injected!");
 }
@@ -202,10 +202,10 @@ async function injectScripts() {
 
   let script_local_paths = [
     'jquery-3.3.1.min.js',
-    'src/transformations.js',
-    'src/scrapewords.js',
-    'src/infestation_agent.js',
-    'src/main.js'
+    'src/injection/transformations.js',
+    'src/injection/scrapewords.js',
+    'src/injection/infestation_agent.js',
+    'src/injection/main.js'
   ];
   chrome.scripting.executeScript({
     target : injection_target,
