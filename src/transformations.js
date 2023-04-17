@@ -1,5 +1,11 @@
+/**
+Defines jquery extension methods that use the transform library to flip//rotate
+*/
+
 (function($) {
   jQuery.fn.extend({
+      // optionally rotates element by degrees,
+      // and optionally flips if rotated upside-down
       rotate:function(degrees, rotate, reflect) {
           let rotation = `rotate(${degrees}deg)`;
           if (!rotate) rotation = '';
@@ -11,7 +17,7 @@
                        'transform' : `${rotation}${reflection}`});
           return $(this);
       },
-      // other jquery extensions unused
+      // all other jquery extensions unused
       rotateflipped:function(degrees) {
           $(this).css({'-webkit-transform': 'rotate('+ degrees +'deg) scale(1, -1)',
                        '-moz-transform': 'rotate('+ degrees +'deg) scale(1, -1)',

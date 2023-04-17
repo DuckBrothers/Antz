@@ -1,3 +1,7 @@
+/**
+Captures messages from the popup background code to trigger webpage behavior
+*/
+
 $(document).ready(function() {
   chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {

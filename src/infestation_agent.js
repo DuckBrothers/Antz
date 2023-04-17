@@ -52,6 +52,7 @@ class Infestation {
     setTimeout(() => this.infest(), this.options.frequency);
   }
 
+  // Gets the spawn coordinates (random, or from word) and manipulates word elem
   prepareAgentSpawnPosition() {
     if (!this.options.words) return randCoords();
 
@@ -81,7 +82,6 @@ class Infestation {
 }
 
 class InfestationAgent {
-  // this is what's called when you use the "new" keyword
   constructor($el, infestation, num, center) {
     const idTag = `${infestation.character.type}_${infestation.wave}_${num}`
     const idTagImg = `${idTag}_img`
@@ -92,8 +92,6 @@ class InfestationAgent {
     this.infestation = infestation;
     this.dead = false;
 
-    // this.node = $('<img id="' + (character.type + num) + '" class="character ' + character.type + '"></img>');
-    // this.node = $(`<img id="${character.type}${num}" class="character ${character.type}"></img>`);
     // initialize DOM element with appropriate id/class
     this.node = $(`
       <div id="${idTag}" style="width:${infestation.options.killzone}px;height:${infestation.options.killzone}px;" class="character_node ${infestation.character.type}"></div>
@@ -105,7 +103,6 @@ class InfestationAgent {
     this.node.css({ position: 'absolute', 'border-radius': '50%', 'z-index': 99, 'background-color': 'transparent', display: 'flex', 'align-items': 'center', 'justify-content': 'center', 'cursor': infestation.character.cursor });
     this.img.css({ 'z-index': 100 });
 
-    // this.node.css({'cursor': 'url(chrome-extension://nmbgndaiokpfjgphpaaoaejfljgkgkmp/img/pokeball.gif), default'});
     $el.append(this.node);
     $(this.id).append(this.img);
     attachKillTrigger(this);

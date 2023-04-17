@@ -191,7 +191,7 @@ async function getTabId() {
 async function injectController() {
   await chrome.scripting.executeScript({
     target : {tabId : await getTabId(), allFrames : false},
-    files : [ "./src/controller.js" ],
+    files : [ "./src/initializer.js" ],
   })
   console.log("Controller injected!");
 }
@@ -313,7 +313,7 @@ function processCustomCharacter(specs) {
   specs.type = `${specs.type}_${r}`;
   specs.words = ['', 'x', 'xx', 'x', 'x', 'x'];
   specs.wordOffset = 2;
-  specs.wordCutoff = 2;
+  specs.wordCutoff = 3;
   specs.cursor = `url(${specs.cursor}), default`;
   return specs;
 }
@@ -414,6 +414,7 @@ chrome.runtime.onMessage.addListener(
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if( request.message === "ready_to_infest" ) {
+      // pulls in state from injected scripts to sync with popup state
       Object.keys(lifecycle.state).forEach((key) => {
         if (key in request.state) lifecycle.state[key] = request.state[key]
       });
@@ -422,10 +423,12 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
-// adds click listener to each character div
+// kicks off script injection handshake and initializes user input lisetners
+// all code that runs to initialize listeners may happen before script injection
 document.addEventListener('DOMContentLoaded', async function () {
 
-  // keeps us in sync with injected scripts
+  // kicks off script injection handshake
+  // - acual injection will happen asynchronously via onMessage listeners above
   injectController().then(() => console.log("injected controller scripts"));
 
   ui.displayInfest();
@@ -450,6 +453,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       document.getElementById('cursorInput').addEventListener(myEvent, () => {syncPreview('cursorInput')});
   })
 
+  // usually options will be read from local storage - but if new, get from src
   if (!localStorage.getItem('options')) retrieveOptions();
   if (!localStorage.getItem('chars')) {
     retrieveChars(lifecycle, ui);
@@ -457,7 +461,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     buildCharList(lifecycle, ui);
   }
 
-  // to always load from source config (during revelopment), comment out above
+  // to always load from source config (during development), comment out above
   // retrieveOptions();
   // retrieveChars(lifecycle, ui);
 });
