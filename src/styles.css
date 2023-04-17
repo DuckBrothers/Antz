@@ -1,8 +1,0 @@
-.character {
-  height: 20px;
-  width: 20px;
-  position: absolute;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 100;
-}

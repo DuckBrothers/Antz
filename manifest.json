@@ -1,20 +1,29 @@
 {
   "name": "Ants",
   "description": "A life-changing productivity hack",
-  "version": "1.2",
+  "version": "2.0",
   "permissions": [
-    "tabs", "http://*/*", "https://*/*"
+    "tabs",
+    "scripting"
   ],
-  "browser_action": {
+  "action": {
       "default_title": "ReadySetGo",
       "default_icon": "./img/bugKiller.png",
       "default_popup": "hello.html"
   },
-  "content_scripts": [
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "web_accessible_resources": [
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "css" : ["./src/styles.css"]
+      "resources": [
+        "img/*"
+      ],
+      "matches": [
+        "*://*/*"
+      ]
     }
-],
-  "manifest_version": 2
+  ],
+  "manifest_version": 3
 }

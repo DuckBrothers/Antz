@@ -1,0 +1,92 @@
+{
+  "pikachu": {
+    "icon":  "SWAP_ME/img/pikachu.gif",
+    "dead": "SWAP_ME/img/pb-catch.png",
+    "cursor": "url(SWAP_ME/img/pokeball.png), default",
+    "type": "pikachu",
+    "words": [
+      "", "!", "go", "zap", "jolt", "pichu", "raichu",
+      "pikachu", "electric", "pikach", "u", "u"
+    ],
+    "wordOffset": 7,
+    "wordCutoff": 9,
+    "rotate": true,
+    "reflect": true,
+    "angle": 270
+  },
+  "bulbasaur": {
+    "icon":  "SWAP_ME/img/bulba.gif",
+    "dead": "SWAP_ME/img/pb-catch.png",
+    "cursor": "url(SWAP_ME/img/pokeball.png), default",
+    "type": "bulba",
+    "words": [
+      "", "!", "go", "ivy", "vine", "bulba", "growth",
+      "ivysaur", "venusaur", "bulbasa", "a", "ur"
+    ],
+    "wordOffset": 9,
+    "wordCutoff": 9,
+    "rotate": true,
+    "reflect": true,
+    "angle": 90
+  },
+  "squirtle": {
+    "icon":  "SWAP_ME/img/squirtle.gif",
+    "dead": "SWAP_ME/img/pb-catch.png",
+    "cursor": "url(SWAP_ME/img/pokeball.png), default",
+    "type": "squirtle",
+    "words": [
+      "", "!", "go", "wet", "blue", "hydro", "splash",
+      "swimmer", "squirtle", "squ", "i", "rtle"
+    ],
+    "wordOffset": 7,
+    "wordCutoff": 9,
+    "rotate": true,
+    "reflect": true,
+    "angle": 90
+  },
+  "charmander": {
+    "icon":  "SWAP_ME/img/char.gif",
+    "dead": "SWAP_ME/img/pb-catch.png",
+    "cursor": "url(SWAP_ME/img/pokeball.png), default",
+    "type": "char",
+    "words": [
+      "", "!", "go", "hot", "char", "ember", "mander", "inferno",
+      "evolving", "chariza", "a", "rd"
+    ],
+    "wordOffset": 9,
+    "wordCutoff": 9,
+    "rotate": true,
+    "reflect": true,
+    "angle": 90
+  },
+  "ant": {
+    "icon":  "SWAP_ME/img/ant.gif",
+    "dead": "SWAP_ME/img/splat.png",
+    "cursor": "grab",
+    "type": "ant",
+    "words": [
+      "", "!", "ew", "ant", "hill", "queen", "picnic",
+      "insects", "crawling", "sm", "o", "sh"
+    ],
+    "wordOffset": 4,
+    "wordCutoff": 9,
+    "rotate": true,
+    "reflect": false,
+    "angle": 0
+  },
+  "ghost": {
+    "icon":  "SWAP_ME/img/ghost.gif",
+    "dead": "SWAP_ME/img/boo.png",
+    "cursor": "zoom-in",
+    "type": "ghost",
+    "words": [
+      "", "!", "ah", "boo", "dead", "ghost", "spooky",
+      "haunted", "floating", "bo", "o", "oo"
+    ],
+    "wordOffset": 4,
+    "wordCutoff": 8,
+    "rotate": false,
+    "reflect": false,
+    "angle": 0
+  }
+}
