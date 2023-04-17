@@ -187,7 +187,7 @@ async function getTabId() {
 // called when popup loads, sends out initial script to determine if our program has already been sent down
 async function injectController() {
   await chrome.scripting.executeScript({
-    target : {tabId : await getTabId(), allFrames : true},
+    target : {tabId : await getTabId(), allFrames : false},
     files : [ "./src/controller.js" ],
   })
   console.log("Controller injected!");
@@ -195,7 +195,7 @@ async function injectController() {
 
 // injects all our scripts - only called the first time popup loads per page
 async function injectScripts() {
-  let injection_target = { tabId : await getTabId(), allFrames : true };
+  let injection_target = { tabId : await getTabId(), allFrames : false };
 
   let script_local_paths = [
     'jquery-3.3.1.min.js',
