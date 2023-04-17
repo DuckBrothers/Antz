@@ -11,32 +11,187 @@
       padding: 0px;
       background: white;
     }
-    div:first-child {
-      margin-top: 0px;
+    #frame {
+      width: 180px;
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      background: #557B83;
+      /* border-radius: 2%; */
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
     }
-    div {
+    #content {
+      width: 90%;
+      margin: 0px;
+      padding: 0px;
+      color: #557B83;
+      /* background: #557B83; */
+    }
+    #tabs-container {
+      /* width: 100%; */
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      /* background: PURPLE; */
+      display: flex;
+      height: 20px;
+      /* justify-content: center; */
+      /* align-items: center;
+      flex-direction: row; */
+      /* flex-wrap: wrap; */
+    }
+    .infest-configure-tab {
+      width: 50%;
+      /* height: 100% */
+      margin: 0px;
+      padding: 2px;
+      border: 0px;
+      /* background: RED; */
+      align-items: center;
+      flex-direction: row;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+    #infest-tab {
+      background: #A2D5AB;
       cursor: pointer;
-      text-align: center;
-      padding: 1px 3px;
-      font-family: sans-serif;
-      font-size: 0.8em;
-      width: 120px;
-      margin: auto;
-      margin-top: 1px;
+    }
+    #configure-tab {
+      background: #E5EFC1;
+      cursor: pointer;
+    }
+    #infest {
+      background: #A2D5AB;
+      display: none;
+    }
+    /* #A2D5AB; */
+    #configure {
+      background: #E5EFC1;
+      display: none;
+      margin: 0px;
+      padding: 5px;
+    }
+    #characters {
+      /* background: GREEN; */
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: baseline;
+      align-items: baseline;
+      max-height: 600px;
+      overflow-y: scroll;
+    }
+    #infest-button-container {
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      display: flex;
+      height: 20px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+    .infest-button {
+      width: 40%;
+      /* height: 100% */
+      margin: 0px;
+      margin-bottom: 5px;
+      padding: 5px;
+      border: 0px;
+      background: #E5EFC1;
+      align-items: center;
+      flex-direction: row;
+      border-radius: 5px;
+      color: #557B83;
+    }
+    .enabled-infest-button {
+      /* color: #557B83; */
+      cursor: pointer;
+    }
+    .disabled-infest-button {
+      /* color: transparent; */
+      cursor: not-allowed;
+    }
+    .infest-padding {
+      width: 5%;
+      /* height: 100% */
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      /* background: LIME; */
+      align-items: center;
+      flex-direction: row;
+    }
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    .characterWrapper {
+      border-radius: 50%;
+      cursor: pointer;
     }
     .character {
       height: auto;
       width: 50px;
+    }
+    /* #frame {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+      border: 0px;
+      background: black;
+      border-radius: 2%;
+    } */
+    #title {
+      color: WHITE;
+      background: #557B83;
+      width: 100%;
+      /* height: 20px; */
+      margin: 0px;
+      padding: 0px;
+      padding-top: 5px;
+    }
+    #instructions {
+      color: WHITE;
+      background: #557B83;
+      width: 100%;
+      /* height: 20px; */
+      margin: 5px;
+      padding: 5px;
+      padding-bottom: 5px;
+    }
+    #optionsToggle {
+      cursor: pointer;
+    }
+    #addCharToggle {
+      cursor: pointer;
+    }
+    div:first-child {
+      margin-top: 0px;
+    }
+    div {
+      /* cursor: pointer; */
+      text-align: center;
+      /* padding: 1px 3px; */
+      font-family: sans-serif;
+      font-size: 0.8em;
+      /* width: 120px; */
+      margin: auto;
+      /* margin-top: 1px; */
     }
     .preview {
       height: auto;
       width: 25px;
     }
     .characterWrapper:hover {
-      background: #F9EBEA;
+      background: #E5EFC1;
     }
-    .formWrapper:hover {
-      background: LightBlue;
+    .toggle:hover {
+      background: #E5EFC1;
     }
     .innerForm {
       display: none;
@@ -50,56 +205,106 @@
     input {
       max-width: 100%
     }
+    #deleteMenu {
+      display: none;
+      z-index: 100;
+      flex-direction: column;
+      float: left;
+      overflow: visible;
+      position: absolute;
+    }
     .delButton {
-      float: right;
-      font-size: 7px;
+      opacity: 0.8;
     }
     .delButton:hover {
       background-color: #F9EBEA;
+      opacity: 1;
     }
     </style>
-    <script src="./src/background.js"></script>
+    <script src="./src/extension/background.js"></script>
   </head>
   <body>
-    <div id="characters">
-    </div>
-    <div id="options" class="formWrapper">
-      <div id="optionsToggle" class="toggle"><h3>Options</h3></div>
-      <div id="innerOptions" class="innerForm">
-        <p>Icon Size (px)</p>
-        <input type="number" id="sizeInput" placeholder='20' max='100' min='5'>
-        <p>Move Speed (ms)</p>
-        <input type="number" id="speedInput" placeholder='100' max='500' min='50'>
-        <p>Move Dist (px)</p>
-        <input type="number" id="distanceInput" placeholder='10' max='40' min='4'>
-        <p>Spawn Frequency (ms)</p>
-        <input type="number" id="frequencyInput" placeholder='1000' max='100000' min='200'>
-        <p>Max (on screen)</p>
-        <input type="number" id="maxInput" placeholder='20' max='500' min='1'>
-        <p>Random Spawn</p>
-        <input type="checkbox" class= "check" id="randomInput">
-        <p>Replace Words</p>
-        <input type="checkbox" class="check" id="replaceInput">
-        <br><br>
-        <input type='button' id='submitOptions' class='submit' value='save'>
+    <div id="frame">
+      <div id="title">
+        <h1>INFESTATION</h1>
       </div>
-    </div>
-    <div id="addChar" class="formWrapper">
-      <div id="addCharToggle" class="toggle"><h3>Add Character</h3></div>
-      <div id="innerAddChar" class="innerForm">
-        <p>Image URL</p>
-        <input type="url" id="iconInput" placeholder='http://www.pngmart.com/files/4/Happy-PNG-HD.png'>
-        <img class='preview' src='http://www.pngmart.com/files/4/Happy-PNG-HD.png' id='iconInputPreview' ></img>
-        <p>Squish URL</p>
-        <input type="url" id="deadInput" placeholder='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg'>
-        <img class='preview' src='http://laoblogger.com/images/clipart-hurt-transparent-background-5.jpg' id='deadInputPreview' ></img>
-        <p>Character</p>
-        <input type="text" placeholder='e.g. ant' id="typeInput">
-        <p>Angle (clockwise from up)</p>
-        <input type="number" placeholder='0' max='359' min='0' id="angleInput">
-        <br><br><br>
-        <input type='button' id='submitAddChar' class='submit' value='save'>
+      <div id="content">
+        <div id="tabs-container">
+          <div id="infest-tab" class="infest-configure-tab"><h3>INFEST</h3></div>
+          <div id="configure-tab" class="infest-configure-tab"><h3>CONFIGURE</h3></div>
+        </div>
+        <div id="infest" class="sub-content">
+          <div id="characters">
+          </div>
+          <div id="infest-button-container">
+            <div class="infest-padding"></div>
+            <div id="clear-button" class="infest-button disabled-infest-button">CLEAR</div>
+            <div class="infest-padding"></div>
+            <div id="freeze-button" class="infest-button disabled-infest-button">FREEZE</div>
+            <div class="infest-padding"></div>
+          </div>
+        </div>
+        <div id="configure" class="sub-content">
+          <div id="options" class="formWrapper">
+            <div id="optionsToggle" class="toggle"><h1>behavior options</h1></div>
+            <div id="innerOptions" class="innerForm">
+              <p>Icon Size (px)</p>
+              <input title="Size of on-screen characters" type="number" id="sizeInput" placeholder='20' max='100' min='5'>
+              <p>Icon Clickzone (px)</p>
+              <input title="Size of clickable zone for on-screen characters" type="number" id="killzoneInput" placeholder='40' max='120' min='5'>
+              <p>Move Speed (ms)</p>
+              <input title="Period between character moves" type="number" id="speedInput" placeholder='100' max='500' min='50'>
+              <p>Move Dist (px)</p>
+              <input title="Distance of character moves" type="number" id="distanceInput" placeholder='10' max='50' min='5'>
+              <p>Spawn Frequency (ms)</p>
+              <input title="How often a new character spans" type="number" id="frequencyInput" placeholder='1000' max='100000' min='200'>
+              <p>Max (per wave)</p>
+              <input title="How many character spawn per wave (character menu click)" type="number" id="waveInput" placeholder='20' max='100' min='1'>
+              <p>Max (on screen)</p>
+              <input title="How many characters can be on screen at once" type="number" id="maxInput" placeholder='40' max='100' min='1'>
+              <p>Spawn from Words</p>
+              <input title="Whether characters spawn from the page's text&#010;If not, all following options are ignored" type="checkbox" class= "check" id="wordsInput">
+              <p>Shuffle Words</p>
+              <input title="Whether to spawn characters from the text randomly (or in order)" type="checkbox" class= "check" id="randomInput">
+              <p>Hide Words</p>
+              <input title="Whether to make words disappear when character spawn from them" type="checkbox" class="check" id="hideInput">
+              <p>Replace Words</p>
+              <input title="Whether to change words when characters spawns from them" type="checkbox" class="check" id="replaceInput">
+              <p>Snap to Screen</p>
+              <input title="Currently unused :(" type="checkbox" class="check" id="snapInput">
+              <br><br>
+              <input type='button' id='submitOptions' class='submit' value='save'>
+              <input type='button' id='backOptions' class='submit' value='back'>
+            </div>
+          </div>
+          <div id="addChar" class="formWrapper">
+            <div id="addCharToggle" class="toggle"><h1>add character</h1></div>
+            <div id="innerAddChar" class="innerForm">
+              <p>Image URL</p>
+              <input title="Image link to character icon on screen and in select menu" type="url" id="iconInput" placeholder='https://s12.gifyu.com/images/eevee.gif'>
+              <img class='preview' src='https://s12.gifyu.com/images/eevee.gif' id='iconInputPreview' ></img>
+              <p>Squish URL</p>
+              <input title="Image link to character icon when clicked and removed" type="url" id="deadInput" placeholder='https://s11.gifyu.com/images/pb-catch.png'>
+              <img class='preview' src='https://s11.gifyu.com/images/pb-catch.png' id='deadInputPreview' ></img>
+              <p>Cursor URL</p>
+              <input title="Image link to cursor icon - 32x32 pixels or smaller" type="url" id="cursorInput" placeholder='https://s12.gifyu.com/images/pokeball.png'>
+              <img class='preview' src='https://s12.gifyu.com/images/pokeball.png' id='cursorInputPreview' ></img>
+              <p>Character</p>
+              <input title="Character name - just used internally" type="text" placeholder='e.g. ant' id="typeInput">
+              <p>Rotate to direction</p>
+              <input title="Rotate character icon based on movement direction&#010;If not checked, creates spooky floating effect" type="checkbox" class="check" id="rotateInput">
+              <p>Reflect</p>
+              <input title="Reflect upright when image is rotated upside-down&#010;Necessary for side-view, but not top-down characters" type="checkbox" class="check" id="reflectInput">
+              <p>Angle (clockwise to up)</p>
+              <input title="How far the image must rotate (clockwise) to be facing up" type="number" placeholder='0' max='359' min='0' id="angleInput">
+              <br><br><br>
+              <input type='button' id='submitAddChar' class='submit' value='save'>
+              <input type='button' id='backAddChar' class='submit' value='back'>
+            </div>
+          </div>
+        </div>
       </div>
+      <div id="instructions"></div>
     </div>
   </body>
 </html>
